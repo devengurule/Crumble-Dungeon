@@ -26,20 +26,19 @@ public class GridController : MonoBehaviour
 
         if (eventManager != null)
         {
-            eventManager.Subscribe(EventType.PlayerPositionChange, OnPlayerChangePosition);
+            
         }
-        Debug.Log(GetCellType(new Vector2Int(0, 0)));
     }
 
-    private void OnPlayerChangePosition(object target)
+    private void OnResetCellType(object target)
     {
         if(target is Vector2Int position)
         {
             CellData data = new CellData();
             data.position = position;
-            data.cellType = CellType.player;
+            data.cellType = CellType.empty;
 
-            UpdateCellData(position, data);
+            UpdateCellData(data);
         }
     }
 
@@ -56,9 +55,15 @@ public class GridController : MonoBehaviour
         }
     }
 
-    public void UpdateCellData(Vector2Int position, CellData data)
+    public void UpdateCellData(CellData data)
     {
-        cells[position.x, position.y] = data;
+        cells[data.position.x, data.position.y] = data;
+    }
+
+    public void UpdateCellData(CellData oldCell, CellData newCell)
+    {
+        cells[oldCell.position.x, oldCell.position.y] = oldCell;
+        cells[newCell.position.x, newCell.position.y] = newCell;
     }
 
     private CellData GetSetCellData(int x, int y)
@@ -71,7 +76,7 @@ public class GridController : MonoBehaviour
         if (tile == floorTile) data.cellType = CellType.empty;
         else if (tile == wallTile) data.cellType = CellType.wall;
 
-        data.position = new Vector2(cellPos.x, cellPos.y);
+        data.position = new Vector2Int(cellPos.x, cellPos.y);
 
         return data;
     }

@@ -21,6 +21,8 @@ public class PlayerMove : MonoBehaviour
     {
         if (target is Vector2Int vector)
         {
+            Vector2Int currentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+            eventManager.Publish(EventType.ResetCellType, currentPosition);
             StartCoroutine(MoveToCell(vector));
         }
     }

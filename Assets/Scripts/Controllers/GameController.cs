@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
     public static GameController instance;
     public EventManager eventManager { get; private set; }
     private GameObject parent;
-    public Vector2 playerPosition { get; private set; }
+    public Vector2Int playerPosition { get; private set; }
 
     private void Awake()
     {
@@ -31,6 +31,11 @@ public class GameController : MonoBehaviour
         {
             instance = this;
         }
+
+        if(eventManager != null)
+        {
+            eventManager.Subscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
+        }
     }
 
     private IEnumerator Start()
@@ -42,14 +47,36 @@ public class GameController : MonoBehaviour
         yield return null;
         // Execute 1 Frame After Start Frame
 
-        eventManager.Publish(EventType.PlayerPositionChange, playerStartPosition);
+    }
+
+    private void OnPlayerPositionChange(object target)
+    {
+        if(target is Vector2Int vector)
+        {
+            CellData oldCell = new();
+            CellData newCell = new();
+
+            oldCell.position = playerPosition;
+            oldCell.cellType = CellType.empty;
+
+            newCell.position = vector;
+            newCell.cellType = CellType.player;
+            
+            GetComponent<GridController>().UpdateCellData(oldCell, newCell);
+            playerPosition = vector;
+        }
     }
 
     private void SpawnPlayer()
     {
         Vector3 spawnPos = new Vector3(playerStartPosition.x, playerStartPosition.y, 0);
         Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        playerPosition = spawnPos;
+        playerPosition = playerStartPosition;
+
+        CellData data = new CellData();
+        data.position = playerStartPosition;
+        data.cellType = CellType.player;
+        GetComponent<GridController>().UpdateCellData(data);
     }
 
     public int PlayerMoveRange()

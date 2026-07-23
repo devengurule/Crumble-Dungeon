@@ -1,6 +1,6 @@
 public enum EventType
 {
-    PlayerPositionChange,
+    ResetCellType,
     ChangePlayerPosition,
     CellSelected
 }

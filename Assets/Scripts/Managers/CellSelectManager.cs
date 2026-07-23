@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CellSelectManager : MonoBehaviour
 {
     [SerializeField] private GameObject selectorFolder;
     [SerializeField] private GameObject selectorPrefab;
+    [SerializeField] private GameObject backButton;
+
     private GameController gameController;
     private EventManager eventManager;
 
@@ -23,17 +26,20 @@ public class CellSelectManager : MonoBehaviour
         if(target is Vector3 vector)
         {
             eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)vector.x, (int)vector.y));
-            eventManager.Publish(EventType.PlayerPositionChange, new Vector2Int((int)vector.x, (int)vector.y));
+            DespawnCellSelectors();
+            backButton.GetComponent<Button>().onClick.Invoke();
         }
     }
 
     public void SpawnCellSelectors()
     {
-        Vector2 playerPos = gameController.playerPosition;
+        Vector2Int playerPos = gameController.playerPosition;
         int playerMoveRange = gameController.PlayerMoveRange();
 
-        Vector2Int bottomLeft = new Vector2Int((int)playerPos.x - playerMoveRange, (int)playerPos.y - playerMoveRange);
-        Vector2Int topRight = new Vector2Int((int)playerPos.x + playerMoveRange, (int)playerPos.y + playerMoveRange);
+        Debug.Log(playerPos);
+
+        Vector2Int bottomLeft = new Vector2Int(playerPos.x - playerMoveRange, playerPos.y - playerMoveRange);
+        Vector2Int topRight = new Vector2Int(playerPos.x + playerMoveRange, playerPos.y + playerMoveRange);
 
         // Top to bottom
         for (int y = bottomLeft.y; y < topRight.y + 1; y++)

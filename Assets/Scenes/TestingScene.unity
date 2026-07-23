@@ -1975,7 +1975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameController
   playerStartPosition: {x: 6, y: 3}
   playerPrefab: {fileID: 2346334031610905724, guid: 10d82bc7bb624b3489927167fbc5ce0c, type: 3}
-  playerMoveRange: 2
+  playerMoveRange: 1
 --- !u!114 &472047396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2006,6 +2006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CellSelectManager
   selectorFolder: {fileID: 916016971}
   selectorPrefab: {fileID: 2101898346491759284, guid: 795e9ba261b7f3a499d348d761f0ec65, type: 3}
+  backButton: {fileID: 1436481501}
 --- !u!1 &479498424
 GameObject:
   m_ObjectHideFlags: 0
