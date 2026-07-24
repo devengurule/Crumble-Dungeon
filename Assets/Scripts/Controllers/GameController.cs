@@ -38,15 +38,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        // Execute on Start Frame
-
         SpawnPlayer();
-
-        yield return null;
-        // Execute 1 Frame After Start Frame
-
     }
 
     private void OnPlayerPositionChange(object target)
@@ -62,7 +56,7 @@ public class GameController : MonoBehaviour
             newCell.position = vector;
             newCell.cellType = CellType.player;
             
-            GetComponent<GridController>().UpdateCellData(oldCell, newCell);
+            UpdateCellData(oldCell, newCell);
             playerPosition = vector;
         }
     }
@@ -76,7 +70,9 @@ public class GameController : MonoBehaviour
         CellData data = new CellData();
         data.position = playerStartPosition;
         data.cellType = CellType.player;
-        GetComponent<GridController>().UpdateCellData(data);
+        UpdateCellData(data);
+
+        eventManager.Publish(EventType.PlayerSpawned);
     }
 
     public int PlayerMoveRange()
@@ -87,5 +83,35 @@ public class GameController : MonoBehaviour
     public CellType GetCellType(Vector2Int vector)
     {
         return GetComponent<GridController>().GetCellType(vector);
+    }
+
+    public CellData GetCellData(Vector2Int vector)
+    {
+        return GetComponent<GridController>().GetCellData(vector);
+    }
+
+    public int GridWidth()
+    {
+        return GetComponent<GridController>().Width();
+    }
+
+    public int GridHeight()
+    {
+        return GetComponent<GridController>().Height();
+    }
+
+    public void UpdateCellData(CellData cell)
+    {
+        GetComponent<GridController>().UpdateCellData(cell);
+    }
+
+    public void UpdateCellData(CellData oldCell, CellData newCell)
+    {
+        GetComponent<GridController>().UpdateCellData(oldCell, newCell);
+    }
+
+    public bool IsPlayerTurn()
+    {
+        return GetComponent<TurnManager>().IsPlayerTurn();
     }
 }

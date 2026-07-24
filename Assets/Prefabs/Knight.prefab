@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4376762043441426877}
   - component: {fileID: 1794404489677434983}
+  - component: {fileID: 3490917126440542861}
+  - component: {fileID: 8429435513025864241}
   m_Layer: 0
   m_Name: Knight
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,3 +94,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!114 &3490917126440542861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6637933939779286366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0af7e9202058f143915a2993420e3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnightScript
+  moveDuration: 1
+  pauseDuration: 0.5
+--- !u!114 &8429435513025864241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6637933939779286366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51f9b483ae4c4d49ac3cb1d07bd3967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PathFinder

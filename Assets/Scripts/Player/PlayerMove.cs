@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    //[SerializeField] Vector2Int position;
     [SerializeField] private float moveDuration;
 
     private EventManager eventManager;
@@ -47,6 +46,7 @@ public class PlayerMove : MonoBehaviour
                 yield return null;
             }
             transform.position = target;
+            eventManager.Publish(EventType.PlayerActionComplete);
         }
     }
 }

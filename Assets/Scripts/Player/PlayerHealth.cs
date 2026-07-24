@@ -1,16 +1,25 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private int playerHealth;
+    [SerializeField] private int maxPlayerHealth;
+    [SerializeField] private GameObject healthObject;
 
     private EventManager eventManager;
+    private TextMeshProUGUI healthText;
+    private int currentPlayerHealth;
 
     private void Start()
     {
         eventManager = GameController.instance.eventManager;
 
-        if(eventManager != null)
+        currentPlayerHealth = maxPlayerHealth;
+
+        healthText = healthObject.GetComponent<TextMeshProUGUI>();
+        healthText.text = currentPlayerHealth.ToString();
+
+        if (eventManager != null)
         {
             eventManager.Subscribe(EventType.DealPlayerDamage, OnDealPlayerDamage);
             eventManager.Subscribe(EventType.HealPlayer, OnHealPlayer);
@@ -23,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
         {
             if(data.target.position == GameController.instance.playerPosition)
             {
-                playerHealth -= data.damage;
+                currentPlayerHealth -= data.damage;
             }
         }
     }
@@ -32,12 +41,17 @@ public class PlayerHealth : MonoBehaviour
     {
         if(target is int val)
         {
-            playerHealth += val;
+            currentPlayerHealth += val;
         }
+    }
+
+    public int GetMaxHealth()
+    {
+        return maxPlayerHealth;
     }
 
     public int GetHealth()
     {
-        return playerHealth;
+        return currentPlayerHealth;
     }
 }

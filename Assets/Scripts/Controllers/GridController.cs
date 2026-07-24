@@ -26,8 +26,13 @@ public class GridController : MonoBehaviour
 
         if (eventManager != null)
         {
-            
+            eventManager.Subscribe(EventType.ResetCellType, OnResetCellType);
         }
+
+        //foreach (var cell in cells)
+        //{
+        //    Debug.Log($"Type: {cell.cellType} Pos: {cell.position}");
+        //}
     }
 
     private void OnResetCellType(object target)
@@ -50,7 +55,7 @@ public class GridController : MonoBehaviour
             // Left to right
             for (int x = 0; x < gridWidth; x++)
             {
-                cells[x, y] = GetSetCellData(x, y);
+                cells[x, y] = InitalizeCellData(x, y);
             }
         }
     }
@@ -66,7 +71,7 @@ public class GridController : MonoBehaviour
         cells[newCell.position.x, newCell.position.y] = newCell;
     }
 
-    private CellData GetSetCellData(int x, int y)
+    private CellData InitalizeCellData(int x, int y)
     {
         CellData data = new CellData();
 
@@ -76,7 +81,7 @@ public class GridController : MonoBehaviour
         if (tile == floorTile) data.cellType = CellType.empty;
         else if (tile == wallTile) data.cellType = CellType.wall;
 
-        data.position = new Vector2Int(cellPos.x, cellPos.y);
+        data.position = new Vector2Int(cellPos.x + 1, cellPos.y + 1);
 
         return data;
     }
@@ -84,5 +89,20 @@ public class GridController : MonoBehaviour
     public CellType GetCellType(Vector2Int position)
     {
         return cells[position.x, position.y].cellType;
+    }
+
+    public CellData GetCellData(Vector2Int position)
+    {
+        return cells[position.x, position.y];
+    }
+
+    public int Width()
+    {
+        return gridWidth;
+    }
+
+    public int Height()
+    {
+        return gridHeight;
     }
 }

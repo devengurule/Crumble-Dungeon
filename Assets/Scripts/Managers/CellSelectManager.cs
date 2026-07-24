@@ -18,12 +18,18 @@ public class CellSelectManager : MonoBehaviour
         if(eventManager != null)
         {
             eventManager.Subscribe(EventType.CellSelected, OnCellSelected);
+            eventManager.Subscribe(EventType.GrantedUseAction, OnGrantedUseAction);
         }
     }
 
     private void OnCellSelected(object target)
     {
-        if(target is Vector3 vector)
+        eventManager.Publish(EventType.RequestUseAction, target);
+    }
+
+    private void OnGrantedUseAction(object target)
+    {
+        if (target is Vector3 vector)
         {
             eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)vector.x, (int)vector.y));
             DespawnCellSelectors();

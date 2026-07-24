@@ -5,5 +5,13 @@ public enum EventType
     CellSelected,
     DealPlayerDamage,
     DealEnemyDamage,
-    HealPlayer
+    HealPlayer,
+    PlayerSpawned,
+    RequestUseAction,
+    GrantedUseAction,
+    EndOfPlayerTurn,
+    EndOfEnemiesTurn,
+    PlayerActionComplete,
+    TurnChange,
+    EnemyActionComplete
 }
