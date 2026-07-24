@@ -114,4 +114,9 @@ public class GameController : MonoBehaviour
     {
         return GetComponent<TurnManager>().IsPlayerTurn();
     }
+
+    public int GetKnightDamage()
+    {
+        return GetComponent<PlayerHealth>().GetKnightDamage();
+    }
 }

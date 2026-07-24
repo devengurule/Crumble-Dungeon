@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class KnightScript : MonoBehaviour
 {
     [SerializeField] private float moveDuration;
-    [SerializeField] private float pauseDuration;
+    [SerializeField] private float attackDuration;
 
     private GameController gameController;
     private EventManager eventManager;
@@ -28,25 +27,20 @@ public class KnightScript : MonoBehaviour
         knightData.cellType = CellType.enemy;
 
         gameController.UpdateCellData(knightData);
-    }
 
-    public bool CanAttackPlayer()
-    {
-        if (DistanceToPlayer() <= Mathf.Sqrt(2) && canAttack)
+        if(eventManager  != null)
         {
-            return true;
+            eventManager.Subscribe(EventType.EnemyAttackSuccessful, OnSuccessfulAttack);
         }
-        return false;
     }
 
-    public bool CanMoveToPlayer()
+    private void OnSuccessfulAttack(object target)
     {
-        List<Vector2Int> path = GetComponent<PathFinder>().FindPath(knightData, gameController.GetCellData(gameController.playerPosition));
-
-        if (path != null) return true;
-        return false;
+        if (!canAttack)
+        {
+            StartCoroutine(WaitForAttack());
+        }
     }
-
 
     private IEnumerator MoveOneCell(Vector2Int position)
     {
@@ -54,8 +48,6 @@ public class KnightScript : MonoBehaviour
         Vector3 start = transform.position;
         float duration = moveDuration;
         float time = 0f;
-
-        yield return new WaitForSeconds(pauseDuration);
 
         if (start != target)
         {
@@ -77,16 +69,12 @@ public class KnightScript : MonoBehaviour
         ResetMove();
     }
 
-    public void AttackPlayerAction()
+    private IEnumerator WaitForAttack()
     {
-        canAttack = false;
-        eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
+        yield return new WaitForSeconds(attackDuration);
+
         canAttack = true;
-    }
-    public void MoveToPlayerAction()
-    {
-        finalPath = GetComponent<PathFinder>().FindPath(knightData, gameController.GetCellData(gameController.playerPosition));
-        moveCoroutine = StartCoroutine(MoveOneCell(finalPath[0]));
+        eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
     }
 
     private void ResetMove()
@@ -95,7 +83,7 @@ public class KnightScript : MonoBehaviour
         moveCoroutine = null;
 
         finalPath.RemoveAt(0);
-        
+
         eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
 
         CellData oldCell = knightData;
@@ -110,5 +98,35 @@ public class KnightScript : MonoBehaviour
     private float DistanceToPlayer()
     {
         return Mathf.Abs((currentPosition - gameController.playerPosition).magnitude);
+    }
+
+    public bool CanAttackPlayer()
+    {
+        if (DistanceToPlayer() <= Mathf.Sqrt(2) && canAttack)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool CanMoveToPlayer()
+    {
+        List<Vector2Int> path = GetComponent<PathFinder>().FindPath(knightData, gameController.GetCellData(gameController.playerPosition));
+
+        if (path != null) return true;
+        return false;
+    }
+
+    public void AttackPlayerAction()
+    {
+        canAttack = false;
+
+        eventManager.Publish(EventType.AttemptMeleeAttackOnPlayer, gameController.GetKnightDamage());
+    }
+
+    public void MoveToPlayerAction()
+    {
+        finalPath = GetComponent<PathFinder>().FindPath(knightData, gameController.GetCellData(gameController.playerPosition));
+        moveCoroutine = StartCoroutine(MoveOneCell(finalPath[0]));
     }
 }

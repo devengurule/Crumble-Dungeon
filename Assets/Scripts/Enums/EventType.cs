@@ -13,5 +13,7 @@ public enum EventType
     EndOfEnemiesTurn,
     PlayerActionComplete,
     TurnChange,
-    EnemyActionComplete
+    EnemyActionComplete,
+    EnemyAttackSuccessful,
+    AttemptMeleeAttackOnPlayer
 }

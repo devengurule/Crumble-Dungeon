@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyActionManager : MonoBehaviour
 {
     [SerializeField] private int maxEnemyActionsPerTurn;
+    [SerializeField] private float actionPauseDuration;
 
     private GameController gameController;
     private EventManager eventManager;
@@ -27,6 +28,11 @@ public class EnemyActionManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        Debug.Log(enemyActionInProgress);
+    }
+
     private void OnTurnChange(object target)
     {
         if (!gameController.IsPlayerTurn())
@@ -37,15 +43,12 @@ public class EnemyActionManager : MonoBehaviour
 
     private void OnEnemyActionComplete(object target)
     {
+        Debug.Log("Action Complete");
         if (target is GameObject obj)
         {
             if (currentEnemyInProgress == obj)
             {
                 enemyActionInProgress = false;
-            }
-            else
-            {
-                Debug.Log("Problems");
             }
         }
     }
@@ -67,32 +70,39 @@ public class EnemyActionManager : MonoBehaviour
             int currentActionsRemaining = maxEnemyActionsPerTurn;
             while (currentActionsRemaining > 0)
             {
-                if (enemy.GetComponent<KnightScript>().CanAttackPlayer())
+                yield return new WaitForSeconds(actionPauseDuration);
+                if (!enemyActionInProgress)
                 {
-                    // Perform Attack Action
+                    if (enemy.GetComponent<KnightScript>().CanAttackPlayer())
+                    {
+                        // Perform Attack Action
 
-                    enemy.GetComponent<KnightScript>().AttackPlayerAction();
-                    enemyActionInProgress = true;
+                        enemy.GetComponent<KnightScript>().AttackPlayerAction();
+                        enemyActionInProgress = true;
 
-                    yield return new WaitUntil(() => enemyActionInProgress);
-                    currentActionsRemaining--;
-                }
-                else if (enemy.GetComponent<KnightScript>().CanMoveToPlayer())
-                {
-                    // Perform Move Action
-                    enemy.GetComponent<KnightScript>().MoveToPlayerAction();
-                    enemyActionInProgress = true;
+                        Debug.Log("ATTACKING NOW");
+                        yield return new WaitUntil(() => !enemyActionInProgress);
+                        Debug.Log("ATTACKING END");
+                        currentActionsRemaining--;
+                    }
+                    else if (enemy.GetComponent<KnightScript>().CanMoveToPlayer())
+                    {
+                        // Perform Move Action
+                        enemy.GetComponent<KnightScript>().MoveToPlayerAction();
+                        enemyActionInProgress = true;
 
-                    yield return new WaitUntil(() => !enemyActionInProgress);
-                    currentActionsRemaining--;
-                }
-                else
-                {
-                    // No Actions can be Performed
-                    currentActionsRemaining = 0;
+                        yield return new WaitUntil(() => !enemyActionInProgress);
+                        currentActionsRemaining--;
+                    }
+                    else
+                    {
+                        // No Actions can be Performed
+                        currentActionsRemaining = 0;
+                    }
                 }
             }
         }
+        Debug.Log("END OF ENEMY TURN");
         performingEnemyActions = false;
         eventManager.Publish(EventType.EndOfEnemiesTurn);
     }
