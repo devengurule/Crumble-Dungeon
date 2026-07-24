@@ -75,6 +75,44 @@ public class Player : MonoBehaviour
 
     private void OnPlayerHeavyAttack(object target)
     {
+        DamageData data = new();
+        data.damage = gameController.GetHeavyAtkDamage();
+
+        List<Vector2Int> cells = new();
+        
+        if (target is Vector2Int position)
+        {
+            Vector2Int center = new();
+            Vector2Int left = new();
+            Vector2Int right = new();
+            Vector2Int up = new();
+            Vector2Int down = new();
+
+            center = position;
+            left = new Vector2Int(position.x - 1, position.y);
+            right = new Vector2Int(position.x + 1, position.y);
+            up = new Vector2Int(position.x, position.y + 1);
+            down = new Vector2Int(position.x, position.y - 1);
+
+            cells.Add(center);
+            cells.Add(left);
+            cells.Add(right);
+            cells.Add(up);
+            cells.Add(down);
+
+            foreach (Vector2Int cell in cells)
+            {
+                CellType cellType = GameController.instance.GetCellType(cell);
+                if (cellType == CellType.enemy)
+                {
+                    data.position = cell;
+                    gameController.DealDamageToEnemy(data);
+                }
+            }
+
+
+        }
+
         eventManager.Publish(EventType.PlayerActionComplete);
     }
 
