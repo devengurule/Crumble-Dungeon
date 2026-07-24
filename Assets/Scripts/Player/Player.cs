@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -46,6 +47,29 @@ public class Player : MonoBehaviour
     }
     private void OnPlayerSweepAttack(object target)
     {
+        DamageData data = new();
+        data.damage = gameController.GetSweepAtkDamage();
+
+        Vector2Int bottomLeft = new Vector2Int(gameController.playerPosition.x - 1, gameController.playerPosition.y - 1);
+        Vector2Int topRight = new Vector2Int(gameController.playerPosition.x + 1, gameController.playerPosition.y + 1);
+
+        // Top to bottom
+        for (int y = bottomLeft.y; y < topRight.y + 1; y++)
+        {
+            // Left to right
+            for (int x = bottomLeft.x; x < topRight.x + 1; x++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+
+                CellType cellType = GameController.instance.GetCellType(position);
+                if (cellType == CellType.enemy)
+                {
+                    data.position = position;
+                    gameController.DealDamageToEnemy(data);
+                }
+            }
+        }
+
         eventManager.Publish(EventType.PlayerActionComplete);
     }
 

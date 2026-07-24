@@ -78,6 +78,7 @@ public class EnemyActionManager : MonoBehaviour
         yield return new WaitForSeconds(turnChangeDelayDuration);
 
         enemiesList = GameObject.FindGameObjectsWithTag("Enemy");
+
         foreach (GameObject enemy in enemiesList)
         {
             Debug.Log(enemy.name);
