@@ -2,5 +2,8 @@ public enum EventType
 {
     ResetCellType,
     ChangePlayerPosition,
-    CellSelected
+    CellSelected,
+    DealPlayerDamage,
+    DealEnemyDamage,
+    HealPlayer
 }

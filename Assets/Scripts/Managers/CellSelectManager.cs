@@ -36,8 +36,6 @@ public class CellSelectManager : MonoBehaviour
         Vector2Int playerPos = gameController.playerPosition;
         int playerMoveRange = gameController.PlayerMoveRange();
 
-        Debug.Log(playerPos);
-
         Vector2Int bottomLeft = new Vector2Int(playerPos.x - playerMoveRange, playerPos.y - playerMoveRange);
         Vector2Int topRight = new Vector2Int(playerPos.x + playerMoveRange, playerPos.y + playerMoveRange);
 
