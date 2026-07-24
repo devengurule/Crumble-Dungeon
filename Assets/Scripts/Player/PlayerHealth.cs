@@ -8,6 +8,10 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] private int knightDamage;
 
+    [SerializeField] private int normalAtkDamage;
+    [SerializeField] private int sweepAtkDamage;
+    [SerializeField] private int heavyAtkDamage;
+
     private EventManager eventManager;
     private TextMeshProUGUI healthText;
     private int currentPlayerHealth;
@@ -20,23 +24,11 @@ public class PlayerHealth : MonoBehaviour
 
         healthText = healthObject.GetComponent<TextMeshProUGUI>();
         UpdateHealthMonitor();
-
+        
         if (eventManager != null)
         {
-            eventManager.Subscribe(EventType.DealPlayerDamage, OnDealPlayerDamage);
             eventManager.Subscribe(EventType.HealPlayer, OnHealPlayer);
             eventManager.Subscribe(EventType.AttemptMeleeAttackOnPlayer, OnMeleeAttackOnPlayer);
-        }
-    }
-
-    private void OnDealPlayerDamage(object target)
-    {
-        if (target is DamageData data)
-        {
-            if (data.target.position == GameController.instance.playerPosition)
-            {
-                currentPlayerHealth -= data.damage;
-            }
         }
     }
 
@@ -80,5 +72,20 @@ public class PlayerHealth : MonoBehaviour
     public int GetKnightDamage()
     {
         return knightDamage;
+    }
+    
+    public int GetNormalAtkDamage()
+    {
+        return normalAtkDamage;
+    }
+
+    public int GetSweepAtkDamage()
+    {
+        return sweepAtkDamage;
+    }
+
+    public int GetHeavyAtkDamage()
+    {
+        return heavyAtkDamage;
     }
 }

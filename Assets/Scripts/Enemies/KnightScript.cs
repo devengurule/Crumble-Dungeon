@@ -34,6 +34,14 @@ public class KnightScript : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (eventManager != null)
+        {
+            eventManager.Unsubscribe(EventType.EnemyAttackSuccessful, OnSuccessfulAttack);
+        }
+    }
+
     private void OnSuccessfulAttack(object target)
     {
         if (!canAttack)

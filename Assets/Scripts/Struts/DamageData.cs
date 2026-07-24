@@ -2,7 +2,6 @@ using UnityEngine;
 
 public struct DamageData
 {
-    public CellData dealer;
-    public CellData target;
+    public Vector2Int position;
     public int damage;
 }

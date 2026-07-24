@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1794404489677434983}
   - component: {fileID: 3490917126440542861}
   - component: {fileID: 8429435513025864241}
+  - component: {fileID: -2678975264745048126}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Enemy
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KnightScript
   moveDuration: 1
-  pauseDuration: 0.5
+  attackDuration: 0.25
 --- !u!114 &8429435513025864241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,3 +121,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51f9b483ae4c4d49ac3cb1d07bd3967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathFinder
+--- !u!114 &-2678975264745048126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6637933939779286366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6a5a7090f00394688fb690bbd63b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  maxEnemyHealth: 2

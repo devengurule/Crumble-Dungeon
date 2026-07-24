@@ -119,4 +119,24 @@ public class GameController : MonoBehaviour
     {
         return GetComponent<PlayerHealth>().GetKnightDamage();
     }
+
+    public int GetNormalAtkDamage()
+    {
+        return GetComponent<PlayerHealth>().GetNormalAtkDamage();
+    }
+
+    public int GetSweepAtkDamage()
+    {
+        return GetComponent<PlayerHealth>().GetSweepAtkDamage();
+    }
+
+    public int GetHeavyAtkDamage()
+    {
+        return GetComponent<PlayerHealth>().GetHeavyAtkDamage();
+    }
+
+    public void DealDamageToEnemy(DamageData data)
+    {
+        eventManager.Publish(EventType.DealEnemyDamage, data);
+    }
 }

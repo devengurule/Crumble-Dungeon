@@ -52,18 +52,18 @@ public class EventManager : MonoBehaviour
     {
         if (GameController.instance.eventManager != null)
         {
-            try
-            {
+            //try
+            //{
                 // Do a multicast invokation on the delegate list so long as the event type exists in the event dictionary
                 if (eventDict.ContainsKey(eventType))
                 {
                     eventDict[eventType]?.Invoke(value);
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.Log($"Failed to Publish EventType: {eventType}, Error Message:{e}");
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.Log($"Failed to Publish EventType: {eventType}, Error Message:{e}");
+            //}
         }
     }
 }

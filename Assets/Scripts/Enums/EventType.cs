@@ -8,6 +8,11 @@ public enum EventType
     RequestUseAction,
     EndOfPlayerTurn,
 
+    // Attacks
+    PerformNormalAttack,
+    PerformSweepAttack,
+    PerformHeavyAttack,
+
     // Enemies
     AttemptMeleeAttackOnPlayer,
     EnemyAttackSuccessful,
@@ -18,6 +23,7 @@ public enum EventType
     HealPlayer,
     DealEnemyDamage,
     DealPlayerDamage,
+    EnemyDied,
 
     // Cell Selection
     MoveCellSelected,

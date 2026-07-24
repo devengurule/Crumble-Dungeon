@@ -1,11 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class EnemyActionManager : MonoBehaviour
 {
     [SerializeField] private int maxEnemyActionsPerTurn;
     [SerializeField] private float actionPauseDuration;
+    [SerializeField] private float turnChangeDelayDuration;
 
     private GameController gameController;
     private EventManager eventManager;
@@ -25,6 +26,7 @@ public class EnemyActionManager : MonoBehaviour
         {
             eventManager.Subscribe(EventType.TurnChange, OnTurnChange);
             eventManager.Subscribe(EventType.EnemyActionComplete, OnEnemyActionComplete);
+            eventManager.Subscribe(EventType.EnemyDied, OnEnemyDied);
         }
     }
 
@@ -47,6 +49,21 @@ public class EnemyActionManager : MonoBehaviour
         }
     }
 
+    private void OnEnemyDied(object target)
+    {
+        if (target is GameObject obj)
+        {
+            foreach (GameObject gameObject in enemiesList)
+            {
+                if(gameObject == obj)
+                {
+                    enemiesList[Array.IndexOf(enemiesList, gameObject)] = null;
+                    currentEnemyInProgress = null;
+                }
+            }
+        }
+    }
+
     private void PerformEnemyActions()
     {
         if(!performingEnemyActions)
@@ -58,11 +75,15 @@ public class EnemyActionManager : MonoBehaviour
 
     private IEnumerator ExecuteEnemyActions()
     {
+        yield return new WaitForSeconds(turnChangeDelayDuration);
+
+        enemiesList = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemy in enemiesList)
         {
+            Debug.Log(enemy.name);
             currentEnemyInProgress = enemy;
             int currentActionsRemaining = maxEnemyActionsPerTurn;
-            while (currentActionsRemaining > 0)
+            while (currentActionsRemaining > 0 && enemy != null)
             {
                 yield return new WaitForSeconds(actionPauseDuration);
                 if (!enemyActionInProgress)

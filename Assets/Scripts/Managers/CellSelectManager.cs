@@ -5,7 +5,8 @@ public class CellSelectManager : MonoBehaviour
 {
     [SerializeField] private GameObject moveSelectorFolder;
     [SerializeField] private GameObject attackSelectorFolder;
-    [SerializeField] private GameObject backButton;
+    [SerializeField] private GameObject moveBackButton;
+    [SerializeField] private GameObject attackBackButton;
 
     [Header("Selectors")]
     [SerializeField] private GameObject moveSelectorPrefab;
@@ -60,28 +61,34 @@ public class CellSelectManager : MonoBehaviour
 
     private void OnGrantedUseAction(object target)
     {
-        if (target is Vector3 vector)
+        switch (selectType)
         {
-            switch (selectType)
-            {
-                case SelectType.Move:
-                    eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)vector.x, (int)vector.y));
+            case SelectType.Move:
+                if (target is Vector3 moveVector)
+                {
+                    eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)moveVector.x, (int)moveVector.y));
                     DespawnCellSelectors();
-                    backButton.GetComponent<Button>().onClick.Invoke();
-                    break;
-                case SelectType.NormalAttack:
-                    
-
-                    break;
-                case SelectType.SweepAttack:
-                    
-
-                    break;
-                case SelectType.HeavyAttack:
-                    
-
-                    break;
-            }
+                    moveBackButton.GetComponent<Button>().onClick.Invoke();
+                }
+                break;
+            case SelectType.NormalAttack:
+                if (target is Vector3 atkVector)
+                {
+                    eventManager.Publish(EventType.PerformNormalAttack, new Vector2Int((int)atkVector.x, (int)atkVector.y));
+                    attackBackButton.GetComponent<Button>().onClick.Invoke();
+                }
+                break;
+            case SelectType.SweepAttack:
+                eventManager.Publish(EventType.PerformSweepAttack, gameController.playerPosition);
+                attackBackButton.GetComponent<Button>().onClick.Invoke();
+                break;
+            case SelectType.HeavyAttack:
+                if (target is Vector3 heavyAtkVector)
+                {
+                    eventManager.Publish(EventType.PerformHeavyAttack, new Vector2Int((int)heavyAtkVector.x, (int)heavyAtkVector.y));
+                    attackBackButton.GetComponent<Button>().onClick.Invoke();
+                }
+                break;
         }
     }
 
@@ -92,7 +99,7 @@ public class CellSelectManager : MonoBehaviour
 
     public void NormalAtkSelectors()
     {
-        SpawnCellSelectors(normalAtkSelectorPrefab);
+        SpawnNormalCellSelectors(normalAtkSelectorPrefab);
     }
 
     public void SweepAtkSelectors()
@@ -126,6 +133,26 @@ public class CellSelectManager : MonoBehaviour
                 {
                     InstantiateSelectors(prefab, position);
                 }
+            }
+        }
+    }
+    private void SpawnNormalCellSelectors(GameObject prefab)
+    {
+        Vector2Int playerPos = gameController.playerPosition;
+        int playerMoveRange = gameController.PlayerMoveRange();
+
+        Vector2Int bottomLeft = new Vector2Int(playerPos.x - playerMoveRange, playerPos.y - playerMoveRange);
+        Vector2Int topRight = new Vector2Int(playerPos.x + playerMoveRange, playerPos.y + playerMoveRange);
+
+        // Top to bottom
+        for (int y = bottomLeft.y; y < topRight.y + 1; y++)
+        {
+            // Left to right
+            for (int x = bottomLeft.x; x < topRight.x + 1; x++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+
+                InstantiateSelectors(prefab, position);
             }
         }
     }
