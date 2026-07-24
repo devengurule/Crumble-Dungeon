@@ -1,19 +1,31 @@
 public enum EventType
 {
-    ResetCellType,
+    // Player
     ChangePlayerPosition,
-    CellSelected,
-    DealPlayerDamage,
-    DealEnemyDamage,
-    HealPlayer,
     PlayerSpawned,
-    RequestUseAction,
-    GrantedUseAction,
-    EndOfPlayerTurn,
-    EndOfEnemiesTurn,
     PlayerActionComplete,
-    TurnChange,
-    EnemyActionComplete,
+    GrantedUseAction,
+    RequestUseAction,
+    EndOfPlayerTurn,
+
+    // Enemies
+    AttemptMeleeAttackOnPlayer,
     EnemyAttackSuccessful,
-    AttemptMeleeAttackOnPlayer
+    EnemyActionComplete,
+    EndOfEnemiesTurn,
+
+    // Health
+    HealPlayer,
+    DealEnemyDamage,
+    DealPlayerDamage,
+
+    // Cell Selection
+    MoveCellSelected,
+    AtkCellSelected,
+    SweepAtkCellSelected,
+    HeavyAtkCellSelected,
+
+    // Misc
+    ResetCellType,
+    TurnChange
 }

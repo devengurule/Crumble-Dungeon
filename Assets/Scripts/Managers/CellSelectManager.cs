@@ -3,10 +3,19 @@ using UnityEngine.UI;
 
 public class CellSelectManager : MonoBehaviour
 {
-    [SerializeField] private GameObject selectorFolder;
-    [SerializeField] private GameObject selectorPrefab;
+    [SerializeField] private GameObject moveSelectorFolder;
+    [SerializeField] private GameObject attackSelectorFolder;
     [SerializeField] private GameObject backButton;
 
+    [Header("Selectors")]
+    [SerializeField] private GameObject moveSelectorPrefab;
+    [SerializeField] private GameObject normalAtkSelectorPrefab;
+    [SerializeField] private GameObject sweepAtkSelectorPrefab;
+    [SerializeField] private GameObject heavyAtkSelectorPrefab;
+
+    
+
+    private SelectType selectType;
     private GameController gameController;
     private EventManager eventManager;
 
@@ -17,13 +26,35 @@ public class CellSelectManager : MonoBehaviour
 
         if(eventManager != null)
         {
-            eventManager.Subscribe(EventType.CellSelected, OnCellSelected);
+            eventManager.Subscribe(EventType.MoveCellSelected, OnMoveCellSelected);
+            eventManager.Subscribe(EventType.AtkCellSelected, OnAtkCellSelected);
+            eventManager.Subscribe(EventType.SweepAtkCellSelected, OnSweepAtkCellSelected);
+            eventManager.Subscribe(EventType.HeavyAtkCellSelected, OnHeavyAtkCellSelected);
             eventManager.Subscribe(EventType.GrantedUseAction, OnGrantedUseAction);
         }
     }
 
-    private void OnCellSelected(object target)
+    private void OnMoveCellSelected(object target)
     {
+        selectType = SelectType.Move;
+        eventManager.Publish(EventType.RequestUseAction, target);
+    }
+
+    private void OnAtkCellSelected(object target)
+    {
+        selectType = SelectType.NormalAttack;
+        eventManager.Publish(EventType.RequestUseAction, target);
+    }
+
+    private void OnSweepAtkCellSelected(object target)
+    {
+        selectType = SelectType.SweepAttack;
+        eventManager.Publish(EventType.RequestUseAction, target);
+    }
+
+    private void OnHeavyAtkCellSelected(object target)
+    {
+        selectType = SelectType.HeavyAttack;
         eventManager.Publish(EventType.RequestUseAction, target);
     }
 
@@ -31,13 +62,50 @@ public class CellSelectManager : MonoBehaviour
     {
         if (target is Vector3 vector)
         {
-            eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)vector.x, (int)vector.y));
-            DespawnCellSelectors();
-            backButton.GetComponent<Button>().onClick.Invoke();
+            switch (selectType)
+            {
+                case SelectType.Move:
+                    eventManager.Publish(EventType.ChangePlayerPosition, new Vector2Int((int)vector.x, (int)vector.y));
+                    DespawnCellSelectors();
+                    backButton.GetComponent<Button>().onClick.Invoke();
+                    break;
+                case SelectType.NormalAttack:
+                    
+
+                    break;
+                case SelectType.SweepAttack:
+                    
+
+                    break;
+                case SelectType.HeavyAttack:
+                    
+
+                    break;
+            }
         }
     }
 
-    public void SpawnCellSelectors()
+    public void MoveSelectors()
+    {
+        SpawnCellSelectors(moveSelectorPrefab);
+    }
+
+    public void NormalAtkSelectors()
+    {
+        SpawnCellSelectors(normalAtkSelectorPrefab);
+    }
+
+    public void SweepAtkSelectors()
+    {
+        SpawnSweepCellSector(sweepAtkSelectorPrefab);
+    }
+
+    public void HeavyAtkSelectors()
+    {
+        SpawnHeavyCellSelector(heavyAtkSelectorPrefab);
+    }
+
+    private void SpawnCellSelectors(GameObject prefab)
     {
         Vector2Int playerPos = gameController.playerPosition;
         int playerMoveRange = gameController.PlayerMoveRange();
@@ -56,24 +124,48 @@ public class CellSelectManager : MonoBehaviour
                 CellType cellType = GameController.instance.GetCellType(position);
                 if(cellType == CellType.empty)
                 {
-                    SpawnSelector(position);
+                    InstantiateSelectors(prefab, position);
                 }
             }
         }
     }
 
+    private void SpawnSweepCellSector(GameObject prefab)
+    {
+        InstantiateSelectors(prefab, gameController.playerPosition);
+    }
+
+    private void SpawnHeavyCellSelector(GameObject prefab)
+    {
+        Vector2Int down = new Vector2Int(gameController.playerPosition.x, gameController.playerPosition.y - 2);
+        Vector2Int up = new Vector2Int(gameController.playerPosition.x, gameController.playerPosition.y + 2);
+        Vector2Int left = new Vector2Int(gameController.playerPosition.x - 2, gameController.playerPosition.y);
+        Vector2Int right = new Vector2Int(gameController.playerPosition.x + 2, gameController.playerPosition.y);
+
+        InstantiateSelectors(prefab, down);
+        InstantiateSelectors(prefab, up);
+        InstantiateSelectors(prefab, left);
+        InstantiateSelectors(prefab, right);
+    }
+
     public void DespawnCellSelectors()
     {
-        for (int i = selectorFolder.transform.childCount - 1; i >= 0; i--)
+        for (int i = moveSelectorFolder.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(selectorFolder.transform.GetChild(i).gameObject);
+            Destroy(moveSelectorFolder.transform.GetChild(i).gameObject);
+        }
+        for (int i = attackSelectorFolder.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(attackSelectorFolder.transform.GetChild(i).gameObject);
         }
     }
 
-    private void SpawnSelector(Vector2Int position)
+    private void InstantiateSelectors(GameObject prefab, Vector2Int position)
     {
         Vector3 vector3Position = new Vector3(position.x, position.y, 0);
-        GameObject selector = Instantiate(selectorPrefab, vector3Position, Quaternion.identity);
-        selector.transform.parent = selectorFolder.transform;
+        GameObject selector = Instantiate(prefab, vector3Position, Quaternion.identity);
+
+        if(selector.tag == "MoveSelector") selector.transform.parent = moveSelectorFolder.transform;
+        else selector.transform.parent = attackSelectorFolder.transform;
     }
 }

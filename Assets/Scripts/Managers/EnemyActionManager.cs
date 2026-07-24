@@ -28,11 +28,6 @@ public class EnemyActionManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        Debug.Log(enemyActionInProgress);
-    }
-
     private void OnTurnChange(object target)
     {
         if (!gameController.IsPlayerTurn())
@@ -43,7 +38,6 @@ public class EnemyActionManager : MonoBehaviour
 
     private void OnEnemyActionComplete(object target)
     {
-        Debug.Log("Action Complete");
         if (target is GameObject obj)
         {
             if (currentEnemyInProgress == obj)
@@ -80,9 +74,7 @@ public class EnemyActionManager : MonoBehaviour
                         enemy.GetComponent<KnightScript>().AttackPlayerAction();
                         enemyActionInProgress = true;
 
-                        Debug.Log("ATTACKING NOW");
                         yield return new WaitUntil(() => !enemyActionInProgress);
-                        Debug.Log("ATTACKING END");
                         currentActionsRemaining--;
                     }
                     else if (enemy.GetComponent<KnightScript>().CanMoveToPlayer())
@@ -102,7 +94,6 @@ public class EnemyActionManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("END OF ENEMY TURN");
         performingEnemyActions = false;
         eventManager.Publish(EventType.EndOfEnemiesTurn);
     }

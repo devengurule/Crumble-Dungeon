@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6887588756744267351}
   - component: {fileID: 3625953606786211724}
-  - component: {fileID: 2377140723112733322}
   - component: {fileID: 7965392361060245378}
+  - component: {fileID: 1126805593415314308}
   m_Layer: 0
-  m_Name: CellSelect
-  m_TagString: Selector
+  m_Name: NormalAttackSelect
+  m_TagString: AttackSelector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2101898346491759284}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -94,20 +94,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!114 &2377140723112733322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101898346491759284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed244a28989c554b8a72f47d94be2f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  highlightColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-  selectColor: {r: 0.952231, g: 1, b: 0, a: 0.5019608}
 --- !u!61 &7965392361060245378
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -142,7 +128,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0024321675, y: 0.00020003319}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -152,5 +138,20 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.0156626, y: 1.011198}
   m_EdgeRadius: 0
+--- !u!114 &1126805593415314308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101898346491759284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed244a28989c554b8a72f47d94be2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellSelectScript
+  selectType: 1
+  highlightColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+  selectColor: {r: 0.9529412, g: 1, b: 0, a: 0.5019608}
