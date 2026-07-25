@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class EnemyActionManager : MonoBehaviour
 {
-    [SerializeField] private int maxEnemyActionsPerTurn;
+    [SerializeField] private int knightActionsPerTurn;
+    [SerializeField] private int rougeActionsPerTurn;
+    [SerializeField] private int archerActionsPerTurn;
+
     [SerializeField] private float actionPauseDuration;
     [SerializeField] private float turnChangeDelayDuration;
 
@@ -81,16 +84,17 @@ public class EnemyActionManager : MonoBehaviour
 
         foreach (GameObject enemy in enemiesList)
         {
-            Debug.Log(enemy.name);
             currentEnemyInProgress = enemy;
-            int currentActionsRemaining = maxEnemyActionsPerTurn;
-            while (currentActionsRemaining > 0 && enemy != null)
+
+            if (!enemyActionInProgress && enemy != null)
             {
-                yield return new WaitForSeconds(actionPauseDuration);
-                if (!enemyActionInProgress)
+                if (enemy.GetComponent<KnightScript>() != null)
                 {
-                    if (enemy.GetComponent<KnightScript>() != null)
+                    int currentActionsRemaining = knightActionsPerTurn;
+                    while (currentActionsRemaining > 0)
                     {
+                        yield return new WaitForSeconds(actionPauseDuration);
+
                         if (enemy.GetComponent<KnightScript>().CanAttackPlayer())
                         {
                             // Perform Attack Action
@@ -116,8 +120,14 @@ public class EnemyActionManager : MonoBehaviour
                             currentActionsRemaining = 0;
                         }
                     }
-                    else if(enemy.GetComponent<RogueScript>() != null)
+                }
+                else if(enemy.GetComponent<RogueScript>() != null)
+                {
+                    int currentActionsRemaining = rougeActionsPerTurn;
+                    while (currentActionsRemaining > 0)
                     {
+                        yield return new WaitForSeconds(actionPauseDuration);
+
                         if (enemy.GetComponent<RogueScript>().CanAttackPlayer())
                         {
                             // Perform Attack Action
@@ -143,8 +153,32 @@ public class EnemyActionManager : MonoBehaviour
                         }
                     }
                 }
+                else if (enemy.GetComponent<ArcherScript>() != null)
+                {
+                    int currentActionsRemaining = archerActionsPerTurn;
+                    while (currentActionsRemaining > 0)
+                    {
+                        yield return new WaitForSeconds(actionPauseDuration);
+
+                        if (enemy.GetComponent<ArcherScript>().CanAttackPlayer())
+                        {
+                            // Perform Attack Action
+                            enemy.GetComponent<ArcherScript>().AttackPlayerAction();
+                            enemyActionInProgress = true;
+
+                            yield return new WaitUntil(() => !enemyActionInProgress);
+                            currentActionsRemaining--;
+                        }
+                        else
+                        {
+                            // No Actions can be Performed
+                            currentActionsRemaining = 0;
+                        }
+                    }
+                }
             }
         }
+
         performingEnemyActions = false;
         eventManager.Publish(EventType.EndOfEnemiesTurn);
     }
