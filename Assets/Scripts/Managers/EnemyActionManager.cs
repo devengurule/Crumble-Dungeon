@@ -121,17 +121,16 @@ public class EnemyActionManager : MonoBehaviour
                         if (enemy.GetComponent<RogueScript>().CanAttackPlayer())
                         {
                             // Perform Attack Action
-
                             enemy.GetComponent<RogueScript>().AttackPlayerAction();
                             enemyActionInProgress = true;
 
                             yield return new WaitUntil(() => !enemyActionInProgress);
                             currentActionsRemaining--;
                         }
-                        else if (enemy.GetComponent<RogueScript>().CanMoveToCell ())
+                        else if (enemy.GetComponent<RogueScript>().CanMoveToCell())
                         {
                             // Perform Move Action
-                            enemy.GetComponent<RogueScript>().MoveToPlayerAction();
+                            enemy.GetComponent<RogueScript>().MoveAction();
                             enemyActionInProgress = true;
 
                             yield return new WaitUntil(() => !enemyActionInProgress);
@@ -148,5 +147,10 @@ public class EnemyActionManager : MonoBehaviour
         }
         performingEnemyActions = false;
         eventManager.Publish(EventType.EndOfEnemiesTurn);
+    }
+
+    public float GetActionPauseDuration()
+    {
+        return actionPauseDuration;
     }
 }

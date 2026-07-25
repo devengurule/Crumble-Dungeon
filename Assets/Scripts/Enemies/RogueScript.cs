@@ -11,13 +11,11 @@ public class RogueScript : MonoBehaviour
     private GameController gameController;
     private EventManager eventManager;
 
-    List<Vector2Int> finalPath = new();
+    private List<Vector2Int> finalPath = new();
     private Coroutine moveCoroutine;
     private Vector2Int currentPosition;
     private CellData rogueData = new();
     private bool canAttack = true;
-
-    private Vector2Int randomPoint;
 
     private void Start()
     {
@@ -55,29 +53,37 @@ public class RogueScript : MonoBehaviour
 
     private IEnumerator MoveOnPath(List<Vector2Int> path)
     {
-        Vector3 target = new Vector3(position.x, position.y, 0);
-        Vector3 start = transform.position;
-        float duration = moveDuration;
-        float time = 0f;
+        List<Vector2Int> movePath = path;
 
-        if (start != target)
+        foreach (Vector2Int position in movePath)
         {
+            Vector3 target = new Vector3(position.x, position.y, 0);
+            Vector3 start = transform.position;
+            float duration = moveDuration;
+            float time = 0f;
 
-            while (time < duration)
+            if (start != target)
             {
-                time += Time.deltaTime;
-                float t = time / duration;
-                t = Mathf.SmoothStep(0f, 1f, t);
+                while (time < duration)
+                {
+                    time += Time.deltaTime;
+                    float t = time / duration;
+                    t = Mathf.SmoothStep(0f, 1f, t);
 
-                transform.position = Vector3.Lerp(start, target, t);
+                    transform.position = Vector3.Lerp(start, target, t);
 
-                yield return null;
+                    yield return null;
+                }
+
+                transform.position = target;
+                currentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+
+                ResetCellData();
             }
 
-            transform.position = target;
-            currentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+            yield return new WaitForSeconds(gameController.GetEnemyActionPauseDuration());
         }
-        ResetMove();
+        EndTurn();
     }
 
     private IEnumerator WaitForAttack()
@@ -88,15 +94,8 @@ public class RogueScript : MonoBehaviour
         eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
     }
 
-    private void ResetMove()
+    private void ResetCellData()
     {
-        StopCoroutine(moveCoroutine);
-        moveCoroutine = null;
-
-        finalPath.RemoveAt(0);
-
-        eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
-
         CellData oldCell = rogueData;
         oldCell.cellType = CellType.empty;
 
@@ -104,6 +103,14 @@ public class RogueScript : MonoBehaviour
         rogueData.cellType = CellType.enemy;
 
         gameController.UpdateCellData(oldCell, rogueData);
+    }
+
+    private void EndTurn()
+    {
+        StopCoroutine(moveCoroutine);
+        moveCoroutine = null;
+
+        eventManager.Publish(EventType.EnemyActionComplete, this.gameObject);
     }
 
     private float DistanceToPlayer()
@@ -127,6 +134,9 @@ public class RogueScript : MonoBehaviour
             // Left to right
             for (int x = bottomLeft.x; x < topRight.x + 1; x++)
             {
+                if (x > gameController.GridWidth() - 1 || y > gameController.GridHeight() - 1) continue;
+                if (x < 0 || y < 0) continue;
+
                 Vector2Int position = new Vector2Int(x, y);
 
                 CellType cellType = GameController.instance.GetCellType(position);
@@ -139,9 +149,10 @@ public class RogueScript : MonoBehaviour
                 }
             }
         }
-        int cellCount = cells.Count;
 
-        return cells[Random.Range(0,cellCount)];
+        int randomCellIndex = Random.Range(0, cells.Count);
+
+        return cells[randomCellIndex];
     }
 
     public bool CanAttackPlayer()
@@ -155,7 +166,7 @@ public class RogueScript : MonoBehaviour
 
     public bool CanMoveToCell()
     {
-        List<Vector2Int> path = GetComponent<PathFinder>().FindPath(rogueData, RandomCellAroundEnemy(moveRange)));
+        List<Vector2Int> path = GetComponent<PathFinder>().FindPath(rogueData, RandomCellAroundEnemy(moveRange));
 
         if (path != null) return true;
         return false;
@@ -168,9 +179,9 @@ public class RogueScript : MonoBehaviour
         eventManager.Publish(EventType.AttemptMeleeAttackOnPlayer, gameController.GetRogueDamage());
     }
 
-    public void MoveToPlayerAction()
+    public void MoveAction()
     {
-        finalPath = GetComponent<PathFinder>().FindPath(rogueData, gameController.GetCellData(gameController.playerPosition));
+        finalPath = GetComponent<PathFinder>().FindPath(rogueData, RandomCellAroundEnemy(moveRange));
         moveCoroutine = StartCoroutine(MoveOnPath(finalPath));
     }
 }

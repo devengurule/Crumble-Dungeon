@@ -144,4 +144,9 @@ public class GameController : MonoBehaviour
     {
         eventManager.Publish(EventType.DealEnemyDamage, data);
     }
+
+    public float GetEnemyActionPauseDuration()
+    {
+        return GetComponent<EnemyActionManager>().GetActionPauseDuration();
+    }
 }

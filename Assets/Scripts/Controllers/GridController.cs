@@ -28,11 +28,6 @@ public class GridController : MonoBehaviour
         {
             eventManager.Subscribe(EventType.ResetCellType, OnResetCellType);
         }
-
-        //foreach (var cell in cells)
-        //{
-        //    Debug.Log($"Type: {cell.cellType} Pos: {cell.position}");
-        //}
     }
 
     private void OnResetCellType(object target)
