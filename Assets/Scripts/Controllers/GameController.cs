@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -212,7 +213,7 @@ public class GameController : MonoBehaviour
 
     public bool IsRoomAvailable(string roomName)
     {
-        if (roomsVisitedList.Contains(roomName)) return false;
+        if (roomsVisitedList.Contains(roomName) || !SceneController.DoesSceneExist(roomName)) return false;
         return true;
     }
 }

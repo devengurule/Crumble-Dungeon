@@ -269,7 +269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6873854230449213166, guid: 346653597aed60743a7b3352344a3392, type: 3}
       propertyPath: sceneName
-      value: TestingScene 2
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6873854230449213166, guid: 346653597aed60743a7b3352344a3392, type: 3}
       propertyPath: spawnPosition.x

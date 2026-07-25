@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,5 +34,16 @@ public class SceneController : MonoBehaviour
     public static Scene GetCurrentScene()
     {
         return SceneManager.GetActiveScene();
+    }
+
+    public static bool DoesSceneExist(string sceneName)
+    {
+        bool exists = false;
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            if (sceneName == Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i))) exists = true;
+        }
+
+        return exists;
     }
 }
