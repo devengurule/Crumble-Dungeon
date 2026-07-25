@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class CellSelectManager : MonoBehaviour
 {
-    [SerializeField] private GameObject moveSelectorFolder;
-    [SerializeField] private GameObject attackSelectorFolder;
     [SerializeField] private GameObject moveBackButton;
     [SerializeField] private GameObject attackBackButton;
 
@@ -14,7 +12,8 @@ public class CellSelectManager : MonoBehaviour
     [SerializeField] private GameObject sweepAtkSelectorPrefab;
     [SerializeField] private GameObject heavyAtkSelectorPrefab;
 
-    
+    private GameObject moveSelectorFolder;
+    private GameObject attackSelectorFolder;
 
     private SelectType selectType;
     private GameController gameController;
@@ -25,13 +24,17 @@ public class CellSelectManager : MonoBehaviour
         gameController = GameController.instance;
         eventManager = gameController.eventManager;
 
-        if(eventManager != null)
+        FindMoveFolder();
+        FindAttackFolder();
+
+        if (eventManager != null)
         {
             eventManager.Subscribe(EventType.MoveCellSelected, OnMoveCellSelected);
             eventManager.Subscribe(EventType.AtkCellSelected, OnAtkCellSelected);
             eventManager.Subscribe(EventType.SweepAtkCellSelected, OnSweepAtkCellSelected);
             eventManager.Subscribe(EventType.HeavyAtkCellSelected, OnHeavyAtkCellSelected);
             eventManager.Subscribe(EventType.GrantedUseAction, OnGrantedUseAction);
+            eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
     }
 
@@ -90,6 +93,23 @@ public class CellSelectManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void OnSceneChange(object target)
+    {
+        FindMoveFolder();
+        FindAttackFolder();
+    }
+
+    private void FindMoveFolder()
+    {
+        GameObject obj = GameObject.FindGameObjectWithTag("MoveSelectorFolder");
+        moveSelectorFolder = obj;
+    }
+    private void FindAttackFolder()
+    {
+        GameObject obj = GameObject.FindGameObjectWithTag("AttackSelectorFolder");
+        attackSelectorFolder = obj;
     }
 
     public void MoveSelectors()

@@ -35,5 +35,11 @@ public enum EventType
     ResetCellType,
     TurnChange,
     GameOver,
-    RestartGame
+    RestartGame,
+    CanUseDoor,
+    CanNotUseDoor,
+    SceneChange,
+    ChangePlayerSpawnPoint,
+    UseDoor,
+    GridComplete
 }

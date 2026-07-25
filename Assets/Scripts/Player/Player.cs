@@ -23,6 +23,18 @@ public class Player : MonoBehaviour
             eventManager.Subscribe(EventType.PerformHeavyAttack, OnPlayerHeavyAttack);
         }
     }
+
+    private void OnDestroy()
+    {
+        if (eventManager != null)
+        {
+            eventManager.Unsubscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
+            eventManager.Unsubscribe(EventType.PerformNormalAttack, OnNormalAttack);
+            eventManager.Unsubscribe(EventType.PerformSweepAttack, OnPlayerSweepAttack);
+            eventManager.Unsubscribe(EventType.PerformHeavyAttack, OnPlayerHeavyAttack);
+        }
+    }
+    
     private void OnPlayerPositionChange(object target)
     {
         if (target is Vector2Int vector)
@@ -140,5 +152,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Door")
+        {
+            eventManager.Publish(EventType.CanUseDoor, collision.gameObject);
+        }
+    }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Door")
+        {
+            eventManager.Publish(EventType.CanNotUseDoor, collision.gameObject);
+        }
+    }
 }

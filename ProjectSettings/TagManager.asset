@@ -10,6 +10,9 @@ TagManager:
   - Door
   - MoveSelector
   - AttackSelector
+  - Tilemap
+  - MoveSelectorFolder
+  - AttackSelectorFolder
   layers:
   - Default
   - TransparentFX
@@ -49,6 +52,9 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 3958584131
+    locked: 0
+  - name: Transition
+    uniqueID: 3750061949
     locked: 0
   m_RenderingLayers:
   - Default

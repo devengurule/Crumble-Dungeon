@@ -4,12 +4,12 @@ using UnityEngine.Tilemaps;
 
 public class GridController : MonoBehaviour
 {
-    [SerializeField] private Tilemap tileMap;
     [SerializeField] private TileBase floorTile;
     [SerializeField] private TileBase wallTile;
     [SerializeField] private Vector2Int gridTopLeft;
 
     private EventManager eventManager;
+    private Tilemap tileMap;
     private static int gridWidth = 13;
     private static int gridHeight = 9;
     private Vector3Int cellPos = new();
@@ -23,10 +23,11 @@ public class GridController : MonoBehaviour
     private void Start()
     {
         eventManager = GameController.instance.eventManager;
-
+        
         if (eventManager != null)
         {
             eventManager.Subscribe(EventType.ResetCellType, OnResetCellType);
+            eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
     }
 
@@ -42,8 +43,16 @@ public class GridController : MonoBehaviour
         }
     }
 
+    private void OnSceneChange(object target)
+    {
+        Debug.Log("Scene Change");
+        InitializeGridArray();
+    }
+
     private void InitializeGridArray()
     {
+        FindTileMap();
+
         // Top to bottom
         for (int y = 0; y < gridHeight; y++)
         {
@@ -79,6 +88,12 @@ public class GridController : MonoBehaviour
         data.position = new Vector2Int(cellPos.x + 1, cellPos.y + 1);
 
         return data;
+    }
+
+    private void FindTileMap()
+    {
+        GameObject obj = GameObject.FindGameObjectWithTag("Tilemap");
+        tileMap = obj.GetComponent<Tilemap>();
     }
 
     public CellType GetCellType(Vector2Int position)

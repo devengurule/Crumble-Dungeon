@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private Vector2Int playerStartPosition;
+    [SerializeField] private Vector2Int playerSpawnPosition;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private int playerMoveRange;
 
     public static GameController instance;
     public EventManager eventManager { get; private set; }
     private GameObject parent;
+    private Coroutine spawnPlayerCoroutine;
     public Vector2Int playerPosition { get; private set; }
 
     private void Awake()
@@ -36,12 +37,14 @@ public class GameController : MonoBehaviour
         if(eventManager != null)
         {
             eventManager.Subscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
+            eventManager.Subscribe(EventType.ChangePlayerPosition, OnChangePlayerSpawnPosition);
+            eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
     }
 
     private void Start()
     {
-        SpawnPlayer();
+        SpawnPlayer(playerSpawnPosition);
     }
 
     private void OnPlayerPositionChange(object target)
@@ -62,18 +65,48 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void SpawnPlayer()
+    private void OnSceneChange(object target)
     {
-        Vector3 spawnPos = new Vector3(playerStartPosition.x, playerStartPosition.y, 0);
+        SpawnPlayerLate(playerSpawnPosition);
+        
+    }
+    
+    private void OnChangePlayerSpawnPosition(object target)
+    {
+        if (target is Vector2Int vector)
+        {
+            playerSpawnPosition = vector;
+        }
+    }
+
+    private void SpawnPlayer(Vector2Int startPos)
+    {
+        Vector3 spawnPos = new Vector3(startPos.x, startPos.y, 0);
+        Debug.Log(SceneController.GetCurrentSceneName());
         Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        playerPosition = playerStartPosition;
+        playerPosition = startPos;
 
         CellData data = new CellData();
-        data.position = playerStartPosition;
+        data.position = startPos;
         data.cellType = CellType.player;
         UpdateCellData(data);
 
         eventManager.Publish(EventType.PlayerSpawned);
+    }
+
+    private void SpawnPlayerLate(Vector2Int playerSpawnPosition)
+    {
+        if (spawnPlayerCoroutine == null) spawnPlayerCoroutine = StartCoroutine(SpawnPlayerIEnumerator(playerSpawnPosition));
+    }
+
+    private IEnumerator SpawnPlayerIEnumerator(Vector2Int playerSpawnPosition)
+    {
+        yield return null;
+
+        SpawnPlayer(playerSpawnPosition);
+
+        StopCoroutine(spawnPlayerCoroutine);
+        spawnPlayerCoroutine = null;
     }
 
     public int PlayerMoveRange()
@@ -159,5 +192,10 @@ public class GameController : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void UseDoor()
+    {
+        eventManager.Publish(EventType.UseDoor);
     }
 }
