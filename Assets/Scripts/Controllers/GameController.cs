@@ -42,6 +42,16 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (eventManager != null)
+        {
+            eventManager.Unsubscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
+            eventManager.Unsubscribe(EventType.ChangePlayerPosition, OnChangePlayerSpawnPosition);
+            eventManager.Unsubscribe(EventType.SceneChange, OnSceneChange);
+        }
+    }
+
     private void Start()
     {
         SpawnPlayer(playerSpawnPosition);
@@ -82,7 +92,6 @@ public class GameController : MonoBehaviour
     private void SpawnPlayer(Vector2Int startPos)
     {
         Vector3 spawnPos = new Vector3(startPos.x, startPos.y, 0);
-        Debug.Log(SceneController.GetCurrentSceneName());
         Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         playerPosition = startPos;
 
@@ -196,6 +205,6 @@ public class GameController : MonoBehaviour
 
     public void UseDoor()
     {
-        eventManager.Publish(EventType.UseDoor);
+        if (IsPlayerTurn()) eventManager.Publish(EventType.UseDoor);
     }
 }

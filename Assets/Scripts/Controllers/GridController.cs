@@ -45,7 +45,6 @@ public class GridController : MonoBehaviour
 
     private void OnSceneChange(object target)
     {
-        Debug.Log("Scene Change");
         InitializeGridArray();
     }
 
