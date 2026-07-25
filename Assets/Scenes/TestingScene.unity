@@ -1368,6 +1368,7 @@ GameObject:
   - component: {fileID: 447874285}
   - component: {fileID: 447874287}
   - component: {fileID: 447874286}
+  - component: {fileID: 447874288}
   m_Layer: 5
   m_Name: TransitionScreen
   m_TagString: Untagged
@@ -1432,6 +1433,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 447874284}
   m_CullTransparentMesh: 1
+--- !u!114 &447874288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447874284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb670f8816fd3f448d89fc8d8dce968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  openPosition: {x: 0, y: 470}
+  closedPosition: {x: 0, y: 0}
+  moveDuration: 0.5
 --- !u!1 &450682639
 GameObject:
   m_ObjectHideFlags: 0

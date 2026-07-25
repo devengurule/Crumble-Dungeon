@@ -31,15 +31,22 @@ public enum EventType
     SweepAtkCellSelected,
     HeavyAtkCellSelected,
 
+    // Transition
+    Transition,
+    TransitionClosed,
+    TransitionOpen,
+
+    // Door
+    UseDoor,
+    CanUseDoor,
+    CanNotUseDoor,
+
     // Misc
     ResetCellType,
     TurnChange,
     GameOver,
     RestartGame,
-    CanUseDoor,
-    CanNotUseDoor,
     SceneChange,
     ChangePlayerSpawnPoint,
-    UseDoor,
     GridComplete
 }

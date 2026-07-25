@@ -26,6 +26,7 @@ public class DoorScript : MonoBehaviour
             eventManager.Subscribe(EventType.UseDoor, OnUseDoor);
             eventManager.Subscribe(EventType.CanUseDoor, OnPlayerHitsDoor);
             eventManager.Subscribe(EventType.CanNotUseDoor, OnPlayerLeavesDoor);
+            eventManager.Subscribe(EventType.TransitionClosed, OnTransitionClosed);
         }
     }
 
@@ -36,6 +37,7 @@ public class DoorScript : MonoBehaviour
             eventManager.Unsubscribe(EventType.UseDoor, OnUseDoor);
             eventManager.Unsubscribe(EventType.CanUseDoor, OnPlayerHitsDoor);
             eventManager.Unsubscribe(EventType.CanNotUseDoor, OnPlayerLeavesDoor);
+            eventManager.Unsubscribe(EventType.TransitionClosed, OnTransitionClosed);
         }
     }
 
@@ -43,10 +45,15 @@ public class DoorScript : MonoBehaviour
     {
         if (isCollidingWithPlayer && !isLocked)
         {
-            eventManager.Publish(EventType.ChangePlayerPosition, spawnPosition);
-
-            SceneController.GoToScene(sceneName);
+            eventManager.Publish(EventType.Transition);
         }
+    }
+
+    private void OnTransitionClosed(object target)
+    {
+        eventManager.Publish(EventType.ChangePlayerPosition, spawnPosition);
+
+        SceneController.GoToScene(sceneName);
     }
 
     private void OnPlayerHitsDoor(object target)
