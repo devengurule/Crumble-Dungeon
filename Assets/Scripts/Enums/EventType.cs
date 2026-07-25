@@ -33,5 +33,7 @@ public enum EventType
 
     // Misc
     ResetCellType,
-    TurnChange
+    TurnChange,
+    GameOver,
+    RestartGame
 }

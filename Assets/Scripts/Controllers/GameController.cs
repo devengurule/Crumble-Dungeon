@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -148,5 +149,15 @@ public class GameController : MonoBehaviour
     public float GetEnemyActionPauseDuration()
     {
         return GetComponent<EnemyActionManager>().GetActionPauseDuration();
+    }
+
+    public void RestartGame()
+    {
+        eventManager.Publish(EventType.RestartGame);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

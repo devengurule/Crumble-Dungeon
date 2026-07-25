@@ -1,9 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerActionManager : MonoBehaviour
 {
     [SerializeField] private int maxActionsPerTurn;
+    [SerializeField] private GameObject actionsTextObject;
 
+    private TextMeshProUGUI actionsText;
     private int currentActionsRemaining;
     private bool actionInProgress;
     private GameController gameController;
@@ -14,9 +17,12 @@ public class PlayerActionManager : MonoBehaviour
         gameController = GameController.instance;
         eventManager = gameController.eventManager;
 
+        actionsText = actionsTextObject.GetComponent<TextMeshProUGUI>();
+        
         currentActionsRemaining = maxActionsPerTurn;
+        actionsText.text = currentActionsRemaining.ToString();
 
-        if(eventManager != null)
+        if (eventManager != null)
         {
             eventManager.Subscribe(EventType.TurnChange, OnTurnChange);
             eventManager.Subscribe(EventType.RequestUseAction, OnRequestUseAction);
@@ -29,6 +35,9 @@ public class PlayerActionManager : MonoBehaviour
         if (!gameController.IsPlayerTurn())
         {
             ResetActions();
+        }else
+        {
+            actionsText.text = currentActionsRemaining.ToString();
         }
     }
 
@@ -38,6 +47,7 @@ public class PlayerActionManager : MonoBehaviour
         {
             actionInProgress = true;
             currentActionsRemaining--;
+            actionsText.text = currentActionsRemaining.ToString();
             eventManager.Publish(EventType.GrantedUseAction, target);
         }
     }

@@ -105,12 +105,16 @@ public class TimeManager : MonoBehaviour
     {
         currentRoomTime -= timeAmount;
 
+        if (currentDungeonTime <= 0) eventManager.Publish(EventType.GameOver, LoseType.RoomCollapse);
+
         UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
     public void UseDungeonTime(int timeAmount)
     {
         currentDungeonTime -= timeAmount;
+
+        if (currentDungeonTime <= 0) eventManager.Publish(EventType.GameOver, LoseType.DungeonCollapse);
 
         UpdatateText(currentRoomTime, currentDungeonTime);
     }

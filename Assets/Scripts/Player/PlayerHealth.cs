@@ -48,9 +48,10 @@ public class PlayerHealth : MonoBehaviour
         if(target is int val)
         {
             currentPlayerHealth -= val;
-            if(currentPlayerHealth < 0)
+            if(currentPlayerHealth <= 0)
             {
                 currentPlayerHealth = 0;
+                eventManager.Publish(EventType.GameOver, LoseType.Died);
             }
             UpdateHealthMonitor();
             eventManager.Publish(EventType.EnemyAttackSuccessful);
