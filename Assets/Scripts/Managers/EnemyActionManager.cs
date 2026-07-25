@@ -89,29 +89,59 @@ public class EnemyActionManager : MonoBehaviour
                 yield return new WaitForSeconds(actionPauseDuration);
                 if (!enemyActionInProgress)
                 {
-                    if (enemy.GetComponent<KnightScript>().CanAttackPlayer())
+                    if (enemy.GetComponent<KnightScript>() != null)
                     {
-                        // Perform Attack Action
+                        if (enemy.GetComponent<KnightScript>().CanAttackPlayer())
+                        {
+                            // Perform Attack Action
 
-                        enemy.GetComponent<KnightScript>().AttackPlayerAction();
-                        enemyActionInProgress = true;
+                            enemy.GetComponent<KnightScript>().AttackPlayerAction();
+                            enemyActionInProgress = true;
 
-                        yield return new WaitUntil(() => !enemyActionInProgress);
-                        currentActionsRemaining--;
+                            yield return new WaitUntil(() => !enemyActionInProgress);
+                            currentActionsRemaining--;
+                        }
+                        else if (enemy.GetComponent<KnightScript>().CanMoveToPlayer())
+                        {
+                            // Perform Move Action
+                            enemy.GetComponent<KnightScript>().MoveToPlayerAction();
+                            enemyActionInProgress = true;
+
+                            yield return new WaitUntil(() => !enemyActionInProgress);
+                            currentActionsRemaining--;
+                        }
+                        else
+                        {
+                            // No Actions can be Performed
+                            currentActionsRemaining = 0;
+                        }
                     }
-                    else if (enemy.GetComponent<KnightScript>().CanMoveToPlayer())
+                    else if(enemy.GetComponent<RogueScript>() != null)
                     {
-                        // Perform Move Action
-                        enemy.GetComponent<KnightScript>().MoveToPlayerAction();
-                        enemyActionInProgress = true;
+                        if (enemy.GetComponent<RogueScript>().CanAttackPlayer())
+                        {
+                            // Perform Attack Action
 
-                        yield return new WaitUntil(() => !enemyActionInProgress);
-                        currentActionsRemaining--;
-                    }
-                    else
-                    {
-                        // No Actions can be Performed
-                        currentActionsRemaining = 0;
+                            enemy.GetComponent<RogueScript>().AttackPlayerAction();
+                            enemyActionInProgress = true;
+
+                            yield return new WaitUntil(() => !enemyActionInProgress);
+                            currentActionsRemaining--;
+                        }
+                        else if (enemy.GetComponent<RogueScript>().CanMoveToPlayer())
+                        {
+                            // Perform Move Action
+                            enemy.GetComponent<RogueScript>().MoveToPlayerAction();
+                            enemyActionInProgress = true;
+
+                            yield return new WaitUntil(() => !enemyActionInProgress);
+                            currentActionsRemaining--;
+                        }
+                        else
+                        {
+                            // No Actions can be Performed
+                            currentActionsRemaining = 0;
+                        }
                     }
                 }
             }

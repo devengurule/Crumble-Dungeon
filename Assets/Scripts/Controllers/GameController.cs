@@ -120,6 +120,11 @@ public class GameController : MonoBehaviour
         return GetComponent<PlayerHealth>().GetKnightDamage();
     }
 
+    public int GetRogueDamage()
+    {
+        return GetComponent<PlayerHealth>().GetRogueDamage();
+    }
+
     public int GetNormalAtkDamage()
     {
         return GetComponent<PlayerHealth>().GetNormalAtkDamage();

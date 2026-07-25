@@ -6,8 +6,11 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxPlayerHealth;
     [SerializeField] private GameObject healthObject;
 
+    [Header("Enemies")]
     [SerializeField] private int knightDamage;
+    [SerializeField] private int rogueDamage;
 
+    [Header("Player Attacks")]
     [SerializeField] private int normalAtkDamage;
     [SerializeField] private int sweepAtkDamage;
     [SerializeField] private int heavyAtkDamage;
@@ -73,7 +76,12 @@ public class PlayerHealth : MonoBehaviour
     {
         return knightDamage;
     }
-    
+
+    public int GetRogueDamage()
+    {
+        return rogueDamage;
+    }
+
     public int GetNormalAtkDamage()
     {
         return normalAtkDamage;
