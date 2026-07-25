@@ -128,7 +128,7 @@ public class EnemyActionManager : MonoBehaviour
                             yield return new WaitUntil(() => !enemyActionInProgress);
                             currentActionsRemaining--;
                         }
-                        else if (enemy.GetComponent<RogueScript>().CanMoveToPlayer())
+                        else if (enemy.GetComponent<RogueScript>().CanMoveToCell ())
                         {
                             // Perform Move Action
                             enemy.GetComponent<RogueScript>().MoveToPlayerAction();
