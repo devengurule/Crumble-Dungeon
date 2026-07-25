@@ -152,5 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60c76af80a3fac64585f69ec15fdede7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  lockedSprite: {fileID: -3846330120125846787, guid: f235be733c4103d48a74ac1be2af65c6, type: 3}
   sceneName: 
   spawnPosition: {x: 0, y: 0}

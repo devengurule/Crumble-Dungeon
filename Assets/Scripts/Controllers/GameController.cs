@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public EventManager eventManager { get; private set; }
     private GameObject parent;
     private Coroutine spawnPlayerCoroutine;
+    private List<string> roomsVisitedList = new();
     public Vector2Int playerPosition { get; private set; }
 
     private void Awake()
@@ -55,6 +56,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         SpawnPlayer(playerSpawnPosition);
+        roomsVisitedList.Add(SceneController.GetCurrentSceneName());
     }
 
     private void OnPlayerPositionChange(object target)
@@ -78,9 +80,9 @@ public class GameController : MonoBehaviour
     private void OnSceneChange(object target)
     {
         SpawnPlayerLate(playerSpawnPosition);
-        
+        roomsVisitedList.Add(SceneController.GetCurrentSceneName());
     }
-    
+
     private void OnChangePlayerSpawnPosition(object target)
     {
         if (target is Vector2Int vector)
@@ -206,5 +208,11 @@ public class GameController : MonoBehaviour
     public void UseDoor()
     {
         if (IsPlayerTurn()) eventManager.Publish(EventType.UseDoor);
+    }
+
+    public bool IsRoomAvailable(string roomName)
+    {
+        if (roomsVisitedList.Contains(roomName)) return false;
+        return true;
     }
 }
