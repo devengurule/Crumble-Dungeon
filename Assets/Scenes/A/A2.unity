@@ -267,11 +267,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 785eea055e54d7f4bbcde1b62bbe73d6, type: 3}
---- !u!1 &678605765 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2512137194240559731, guid: dadf645f5083ce04d92b764416e9d320, type: 3}
-  m_PrefabInstance: {fileID: 1440961219}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1250368655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -642,14 +637,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 885155807196760195, guid: dadf645f5083ce04d92b764416e9d320, type: 3}
-      propertyPath: maxActionsPerTurn
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1151837475389116925, guid: dadf645f5083ce04d92b764416e9d320, type: 3}
-      propertyPath: goldObject
-      value: 
-      objectReference: {fileID: 678605765}
     - target: {fileID: 3632837305583768064, guid: dadf645f5083ce04d92b764416e9d320, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.31463

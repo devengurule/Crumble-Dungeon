@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class DoorScript : MonoBehaviour
 {
+    [SerializeField] private Sprite endSprite;
     [SerializeField] private Sprite lockedSprite;
     [SerializeField] private string sceneName;
     [SerializeField] private Vector2Int spawnPosition;
@@ -17,9 +18,13 @@ public class DoorScript : MonoBehaviour
         gameController = GameController.instance;
         eventManager = gameController.eventManager;
 
-        isLocked = !gameController.IsRoomAvailable(sceneName);
+        if (GetComponent<SpriteRenderer>().sprite != endSprite)
+        {
+            isLocked = !gameController.IsRoomAvailable(sceneName);
 
-        if (isLocked) GetComponent<SpriteRenderer>().sprite = lockedSprite;
+            if (isLocked) GetComponent<SpriteRenderer>().sprite = lockedSprite;
+        }
+        else isLocked = false;
 
         if (eventManager != null)
         {
@@ -45,13 +50,17 @@ public class DoorScript : MonoBehaviour
     {
         if (isCollidingWithPlayer && !isLocked)
         {
-            eventManager.Publish(EventType.Transition);
+            if (GetComponent<SpriteRenderer>().sprite == endSprite)
+            {
+                eventManager.Publish(EventType.Escape);
+            }
+            else eventManager.Publish(EventType.Transition);
         }
     }
 
     private void OnTransitionClosed(object target)
     {
-        if (isCollidingWithPlayer && !isLocked)
+        if (isCollidingWithPlayer && !isLocked && GetComponent<SpriteRenderer>().sprite != endSprite)
         {
             eventManager.Publish(EventType.ChangePlayerPosition, spawnPosition);
 

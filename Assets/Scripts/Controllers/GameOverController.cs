@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GameOverController : MonoBehaviour
 {
+    [SerializeField] private GameObject YouWinObject;
+
     [SerializeField] private GameObject UIElements;
 
     [SerializeField] private GameObject enemyDeath;
@@ -19,6 +21,7 @@ public class GameOverController : MonoBehaviour
         if(eventManager != null)
         {
             eventManager.Subscribe(EventType.GameOver, OnGameOver);
+            eventManager.Subscribe(EventType.Escape, OnEscape);
         }
     }
 
@@ -56,5 +59,10 @@ public class GameOverController : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void OnEscape(object target)
+    {
+        YouWinObject.SetActive(true);
     }
 }
