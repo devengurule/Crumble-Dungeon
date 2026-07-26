@@ -24,6 +24,8 @@ public class TransitionScript : MonoBehaviour
             eventManager.Subscribe(EventType.Transition, OnTransition);
             eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
+
+        eventManager.Publish(EventType.Transition);
     }
 
     private void OnDestroy()
@@ -35,10 +37,6 @@ public class TransitionScript : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        Debug.Log(GetComponent<RectTransform>().localPosition);
-    }
     private void OnTransition(object target)
     {
         if (currentPosition == closedPosition)
@@ -78,6 +76,7 @@ public class TransitionScript : MonoBehaviour
                 yield return null;
             }
             GetComponent<RectTransform>().localPosition = target;
+            currentPosition = GetComponent<RectTransform>().localPosition;
 
             if (target == closedPosition) eventManager.Publish(EventType.TransitionClosed);
             else if (target == openPosition) eventManager.Publish(EventType.TransitionOpen);
