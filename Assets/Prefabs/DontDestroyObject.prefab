@@ -3239,7 +3239,9 @@ MonoBehaviour:
   maxPlayerHealth: 10
   healthObject: {fileID: 57350987532215987}
   flashDuration: 0.25
-  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  hurtFlashColor: {r: 1, g: 0.49622637, b: 0.49622637, a: 1}
+  healFlashColor: {r: 0.5545667, g: 1, b: 0.5113207, a: 1}
+  healAmount: 2
   knightDamage: 1
   rogueDamage: 1
   normalAtkDamage: 1

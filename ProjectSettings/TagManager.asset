@@ -13,8 +13,8 @@ TagManager:
   - Tilemap
   - MoveSelectorFolder
   - AttackSelectorFolder
-  - Coin
   - Gold
+  - Heart
   layers:
   - Default
   - TransparentFX

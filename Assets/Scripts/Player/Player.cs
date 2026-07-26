@@ -175,5 +175,10 @@ public class Player : MonoBehaviour
             eventManager.Publish(EventType.CollectGold);
             Destroy(collision.gameObject);
         }
+        else if(collision.gameObject.tag == "Heart")
+        {
+            eventManager.Publish(EventType.HealPlayer);
+            Destroy(collision.gameObject);
+        }
     }
 }

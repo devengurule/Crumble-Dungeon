@@ -8,7 +8,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxPlayerHealth;
     [SerializeField] private GameObject healthObject;
     [SerializeField] private float flashDuration;
-    [SerializeField] private Color flashColor;
+    [SerializeField] private Color hurtFlashColor;
+    [SerializeField] private Color healFlashColor;
+    [SerializeField] private int healAmount;
 
 
     [Header("Enemies")]
@@ -40,12 +42,21 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (eventManager != null)
+        {
+            eventManager.Unsubscribe(EventType.HealPlayer, OnHealPlayer);
+            eventManager.Unsubscribe(EventType.AttemptMeleeAttackOnPlayer, OnMeleeAttackOnPlayer);
+        }
+    }
+
     private void OnHealPlayer(object target)
     {
-        if (target is int val)
-        {
-            currentPlayerHealth += val;
-        }
+        currentPlayerHealth += healAmount;
+        if(currentPlayerHealth > maxPlayerHealth) currentPlayerHealth = maxPlayerHealth;
+        UpdateHealthMonitor();
+        StartCoroutine(Flash(healFlashColor));
     }
 
     private void OnMeleeAttackOnPlayer(object target)
@@ -61,7 +72,7 @@ public class PlayerHealth : MonoBehaviour
             UpdateHealthMonitor();
             eventManager.Publish(EventType.EnemyAttackSuccessful);
 
-            StartCoroutine(HurtFlash());
+            StartCoroutine(Flash(hurtFlashColor));
         }
     }
 
@@ -70,13 +81,13 @@ public class PlayerHealth : MonoBehaviour
         healthText.text = currentPlayerHealth.ToString();
     }
 
-    private IEnumerator HurtFlash()
+    private IEnumerator Flash(Color color)
     {
         GameObject imageObject = healthObject.transform.parent.gameObject;
         Image image = imageObject.GetComponent<Image>();
         Color startColor = image.color;
         Color normal = startColor;
-        Color target = flashColor;
+        Color target = color;
 
         float duration = flashDuration / 2;
         float timeElapsed = 0f;
