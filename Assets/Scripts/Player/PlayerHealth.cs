@@ -1,10 +1,15 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxPlayerHealth;
     [SerializeField] private GameObject healthObject;
+    [SerializeField] private float flashDuration;
+    [SerializeField] private Color flashColor;
+
 
     [Header("Enemies")]
     [SerializeField] private int knightDamage;
@@ -55,6 +60,8 @@ public class PlayerHealth : MonoBehaviour
             }
             UpdateHealthMonitor();
             eventManager.Publish(EventType.EnemyAttackSuccessful);
+
+            StartCoroutine(HurtFlash());
         }
     }
 
@@ -62,6 +69,46 @@ public class PlayerHealth : MonoBehaviour
     {
         healthText.text = currentPlayerHealth.ToString();
     }
+
+    private IEnumerator HurtFlash()
+    {
+        GameObject imageObject = healthObject.transform.parent.gameObject;
+        Image image = imageObject.GetComponent<Image>();
+        Color startColor = image.color;
+        Color normal = startColor;
+        Color target = flashColor;
+
+        float duration = flashDuration / 2;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            image.color = Color.Lerp(normal, target, timeElapsed / duration);
+
+            yield return null;
+        }
+
+        image.color = target;
+
+        timeElapsed = 0f;
+
+        target = startColor;
+        normal = image.color;
+
+        while (timeElapsed < duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            image.color = Color.Lerp(normal, target, timeElapsed / duration);
+
+            yield return null;
+        }
+
+        image.color = target;
+    }
+
 
     public int GetMaxHealth()
     {

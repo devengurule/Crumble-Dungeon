@@ -1657,8 +1657,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b26897ad70af5342abf5edca94f1591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxPlayerHealth: 2
+  maxPlayerHealth: 10
   healthObject: {fileID: 2044523388}
+  flashDuration: 0.25
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
   knightDamage: 1
   rogueDamage: 1
   normalAtkDamage: 1
@@ -8121,6 +8123,30 @@ PrefabInstance:
     - target: {fileID: 5464033496831468802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
       propertyPath: m_Name
       value: Misc
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907572134607100802, guid: a12ca830e73f8ff4d9c8e8bd2a211e4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

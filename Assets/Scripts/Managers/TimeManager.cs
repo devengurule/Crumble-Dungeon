@@ -64,6 +64,7 @@ public class TimeManager : MonoBehaviour
             eventManager.Subscribe(EventType.PerformNormalAttack, OnNormalAttack);
             eventManager.Subscribe(EventType.PerformSweepAttack, OnPlayerSweepAttack);
             eventManager.Subscribe(EventType.PerformHeavyAttack, OnPlayerHeavyAttack);
+            eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
     }
 
@@ -93,6 +94,11 @@ public class TimeManager : MonoBehaviour
         currentRoomTime -= hAtk;
         currentDungeonTime -= hAtk;
         UpdatateText(currentRoomTime, currentDungeonTime);
+    }
+
+    private void OnSceneChange(object target)
+    {
+        ResetRoomTime();
     }
 
     private void UpdatateText(int roomTime, int dungeonTime)
