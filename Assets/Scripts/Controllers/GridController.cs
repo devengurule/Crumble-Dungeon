@@ -15,11 +15,6 @@ public class GridController : MonoBehaviour
     private Vector3Int cellPos = new();
     private CellData[,] cells = new CellData[gridWidth, gridHeight];
 
-    private void Awake()
-    {
-        InitializeGridArray();
-    }
-
     private void Start()
     {
         eventManager = GameController.instance.eventManager;
@@ -45,7 +40,10 @@ public class GridController : MonoBehaviour
 
     private void OnSceneChange(object target)
     {
-        InitializeGridArray();
+        if (SceneController.GetCurrentSceneName() != "Intro")
+        {
+            InitializeGridArray();
+        }
     }
 
     private void InitializeGridArray()

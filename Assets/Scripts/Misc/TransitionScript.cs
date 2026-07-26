@@ -16,16 +16,23 @@ public class TransitionScript : MonoBehaviour
     {
         eventManager = GameController.instance.eventManager;
 
-        currentPosition = closedPosition;
-        GetComponent<RectTransform>().localPosition = currentPosition;
-
         if (eventManager != null)
         {
             eventManager.Subscribe(EventType.Transition, OnTransition);
             eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
         }
 
-        eventManager.Publish(EventType.Transition);
+        if (SceneController.GetCurrentSceneName() != "Intro")
+        {
+            currentPosition = closedPosition;
+            GetComponent<RectTransform>().localPosition = currentPosition;
+            eventManager.Publish(EventType.Transition);
+        }
+        else
+        {
+            currentPosition = openPosition;
+            GetComponent<RectTransform>().localPosition = currentPosition;
+        }
     }
 
     private void OnDestroy()

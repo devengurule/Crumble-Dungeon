@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private GameObject playerUI;
+    [SerializeField] private GameObject titleScreen;
     [SerializeField] private Vector2Int playerSpawnPosition;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private int playerMoveRange;
@@ -41,6 +43,7 @@ public class GameController : MonoBehaviour
             eventManager.Subscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
             eventManager.Subscribe(EventType.ChangePlayerPosition, OnChangePlayerSpawnPosition);
             eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
+            eventManager.Subscribe(EventType.TransitionClosed, OnTransitionClosed);
         }
     }
 
@@ -51,13 +54,8 @@ public class GameController : MonoBehaviour
             eventManager.Unsubscribe(EventType.ChangePlayerPosition, OnPlayerPositionChange);
             eventManager.Unsubscribe(EventType.ChangePlayerPosition, OnChangePlayerSpawnPosition);
             eventManager.Unsubscribe(EventType.SceneChange, OnSceneChange);
+            eventManager.Unsubscribe(EventType.TransitionClosed, OnTransitionClosed);
         }
-    }
-
-    private void Start()
-    {
-        SpawnPlayer(playerSpawnPosition);
-        roomsVisitedList.Add(SceneController.GetCurrentSceneName());
     }
 
     private void OnPlayerPositionChange(object target)
@@ -80,6 +78,12 @@ public class GameController : MonoBehaviour
 
     private void OnSceneChange(object target)
     {
+        if (SceneController.GetCurrentSceneName() == "A2")
+        {
+            playerUI.SetActive(true);
+            titleScreen.SetActive(false);
+        }
+
         SpawnPlayerLate(playerSpawnPosition);
         roomsVisitedList.Add(SceneController.GetCurrentSceneName());
     }
@@ -104,6 +108,14 @@ public class GameController : MonoBehaviour
         UpdateCellData(data);
 
         eventManager.Publish(EventType.PlayerSpawned);
+    }
+
+    private void OnTransitionClosed(object target)
+    {
+        if (SceneController.GetCurrentSceneName() == "Intro")
+        {
+            SceneController.GoToScene("A2");
+        }
     }
 
     private void SpawnPlayerLate(Vector2Int playerSpawnPosition)
@@ -204,6 +216,11 @@ public class GameController : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void Play()
+    {
+        eventManager.Publish(EventType.Transition);
     }
 
     public void UseDoor()
