@@ -13,6 +13,8 @@ TagManager:
   - Tilemap
   - MoveSelectorFolder
   - AttackSelectorFolder
+  - Coin
+  - Gold
   layers:
   - Default
   - TransparentFX
@@ -49,6 +51,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemies
+    uniqueID: 271640527
     locked: 0
   - name: Walls
     uniqueID: 3958584131

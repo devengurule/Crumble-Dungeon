@@ -48,5 +48,6 @@ public enum EventType
     RestartGame,
     SceneChange,
     ChangePlayerSpawnPoint,
-    GridComplete
+    GridComplete,
+    CollectGold
 }

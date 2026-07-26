@@ -167,4 +167,13 @@ public class Player : MonoBehaviour
             eventManager.Publish(EventType.CanNotUseDoor, collision.gameObject);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Gold")
+        {
+            eventManager.Publish(EventType.CollectGold);
+            Destroy(collision.gameObject);
+        }
+    }
 }
