@@ -51,16 +51,21 @@ public class DoorScript : MonoBehaviour
 
     private void OnTransitionClosed(object target)
     {
-        eventManager.Publish(EventType.ChangePlayerPosition, spawnPosition);
+        if (isCollidingWithPlayer && !isLocked)
+        {
+            eventManager.Publish(EventType.ChangePlayerPosition, spawnPosition);
 
-        SceneController.GoToScene(sceneName);
+            SceneController.GoToScene(sceneName);
+        }
     }
 
     private void OnPlayerHitsDoor(object target)
     {
         if (target is GameObject obj)
         {
-            if (obj == gameObject) isCollidingWithPlayer = true;
+            
+            if (obj.transform.position == gameObject.transform.position) isCollidingWithPlayer = true;
+            else isCollidingWithPlayer = false;
         }
     }
 
@@ -68,7 +73,8 @@ public class DoorScript : MonoBehaviour
     {
         if (target is GameObject obj)
         {
-            if(obj == gameObject) isCollidingWithPlayer = false;
+            if(obj.transform.position == gameObject.transform.position) isCollidingWithPlayer = false;
+            else isCollidingWithPlayer = false;
         }
     }
 }

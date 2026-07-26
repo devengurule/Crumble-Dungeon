@@ -156,6 +156,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Door")
         {
+            Debug.Log("Colliding");
             eventManager.Publish(EventType.CanUseDoor, collision.gameObject);
         }
     }
