@@ -65,34 +65,43 @@ public class TimeManager : MonoBehaviour
             eventManager.Subscribe(EventType.PerformSweepAttack, OnPlayerSweepAttack);
             eventManager.Subscribe(EventType.PerformHeavyAttack, OnPlayerHeavyAttack);
             eventManager.Subscribe(EventType.SceneChange, OnSceneChange);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
+    }
+
+    private void OnRestart(object target)
+    {
+        currentRoomTime = roomTime;
+        currentDungeonTime = dungeonTime;
+
+        UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
     private void OnPlayerMove(object target)
     {
-        currentRoomTime -= move;
-        currentDungeonTime -= move;
+        UseRoomTime(move);
+        UseDungeonTime(move);
         UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
     private void OnNormalAttack(object target)
     {
-        currentRoomTime -= nAtk;
-        currentDungeonTime -= nAtk;
+        UseRoomTime(nAtk);
+        UseDungeonTime(nAtk);
         UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
     private void OnPlayerSweepAttack(object target)
     {
-        currentRoomTime -= sAtk;
-        currentDungeonTime -= sAtk;
+        UseRoomTime(sAtk);
+        UseDungeonTime(sAtk);
         UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
     private void OnPlayerHeavyAttack(object target)
     {
-        currentRoomTime -= hAtk;
-        currentDungeonTime -= hAtk;
+        UseRoomTime(hAtk);
+        UseDungeonTime(hAtk);
         UpdatateText(currentRoomTime, currentDungeonTime);
     }
 
@@ -111,7 +120,7 @@ public class TimeManager : MonoBehaviour
     {
         currentRoomTime -= timeAmount;
 
-        if (currentDungeonTime <= 0) eventManager.Publish(EventType.GameOver, LoseType.RoomCollapse);
+        if (currentRoomTime <= 0) eventManager.Publish(EventType.GameOver, LoseType.RoomCollapse);
 
         UpdatateText(currentRoomTime, currentDungeonTime);
     }

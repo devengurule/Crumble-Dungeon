@@ -39,6 +39,7 @@ public class PlayerHealth : MonoBehaviour
         {
             eventManager.Subscribe(EventType.HealPlayer, OnHealPlayer);
             eventManager.Subscribe(EventType.AttemptMeleeAttackOnPlayer, OnMeleeAttackOnPlayer);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
     }
 
@@ -48,6 +49,7 @@ public class PlayerHealth : MonoBehaviour
         {
             eventManager.Unsubscribe(EventType.HealPlayer, OnHealPlayer);
             eventManager.Unsubscribe(EventType.AttemptMeleeAttackOnPlayer, OnMeleeAttackOnPlayer);
+            eventManager.Unsubscribe(EventType.RestartGame, OnRestart);
         }
     }
 
@@ -79,6 +81,12 @@ public class PlayerHealth : MonoBehaviour
     private void UpdateHealthMonitor()
     {
         healthText.text = currentPlayerHealth.ToString();
+    }
+    
+    private void OnRestart(object target)
+    {
+        currentPlayerHealth = maxPlayerHealth;
+        UpdateHealthMonitor();
     }
 
     private IEnumerator Flash(Color color)

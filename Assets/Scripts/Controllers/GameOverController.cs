@@ -22,7 +22,19 @@ public class GameOverController : MonoBehaviour
         {
             eventManager.Subscribe(EventType.GameOver, OnGameOver);
             eventManager.Subscribe(EventType.Escape, OnEscape);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
+    }
+
+    private void OnRestart(object target)
+    {
+        UIElements.SetActive(true);
+
+        enemyDeath.SetActive(false);
+        enemyDeath.transform.parent.gameObject.SetActive(false);
+        roomDeath.SetActive(false);
+        dungeonDeath.SetActive(false);
+        YouWinObject.SetActive(false);
     }
 
     private void OnGameOver(object target)

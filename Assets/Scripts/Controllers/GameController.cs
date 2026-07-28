@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
     private List<string> roomsVisitedList = new();
     public Vector2Int playerPosition { get; private set; }
 
+    private bool restart;
+
     private void Awake()
     {
         parent = transform.parent.gameObject;
@@ -83,6 +85,11 @@ public class GameController : MonoBehaviour
             playerUI.SetActive(true);
             titleScreen.SetActive(false);
         }
+        else if (SceneController.GetCurrentSceneName() == "A2")
+        {
+            playerUI.SetActive(false);
+            titleScreen.SetActive(true);
+        }
 
         SpawnPlayerLate(playerSpawnPosition);
         roomsVisitedList.Add(SceneController.GetCurrentSceneName());
@@ -115,6 +122,15 @@ public class GameController : MonoBehaviour
         if (SceneController.GetCurrentSceneName() == "Intro")
         {
             SceneController.GoToScene("A2");
+        }
+
+        if (restart)
+        {
+            roomsVisitedList.Clear();
+            SceneController.GoToScene("A2");
+            playerSpawnPosition = new Vector2Int(6, 4);
+            eventManager.Publish(EventType.RestartGame);
+            restart = false;
         }
     }
 
@@ -210,7 +226,10 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        eventManager.Publish(EventType.RestartGame);
+        
+
+        eventManager.Publish(EventType.Transition);
+        restart = true;
     }
 
     public void Quit()

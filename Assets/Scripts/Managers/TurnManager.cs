@@ -22,6 +22,7 @@ public class TurnManager : MonoBehaviour
         {
             eventManager.Subscribe(EventType.EndOfPlayerTurn, OnEndOfPlayerTurn);
             eventManager.Subscribe(EventType.EndOfEnemiesTurn, OnEndOfEnemiesTurn);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
     }
 
@@ -39,6 +40,13 @@ public class TurnManager : MonoBehaviour
         playerDark.SetActive(false);
         enemyDark.SetActive(true);
         eventManager.Publish(EventType.TurnChange);
+    }
+
+    private void OnRestart(object target)
+    {
+        isPlayerTurn = true;
+        playerDark.SetActive(false);
+        enemyDark.SetActive(true);
     }
 
     public bool IsPlayerTurn()

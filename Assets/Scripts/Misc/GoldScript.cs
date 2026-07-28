@@ -18,7 +18,14 @@ public class GoldScript : MonoBehaviour
         if ( eventManager != null)
         {
             eventManager.Subscribe(EventType.CollectGold, OnCollectGold);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
+    }
+
+    private void OnRestart(object target)
+    {
+        goldCollected = 0;
+        UpdateText();
     }
 
     private void OnCollectGold(object target)

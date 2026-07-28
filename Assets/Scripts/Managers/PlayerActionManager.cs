@@ -28,6 +28,7 @@ public class PlayerActionManager : MonoBehaviour
             eventManager.Subscribe(EventType.RequestUseAction, OnRequestUseAction);
             eventManager.Subscribe(EventType.PlayerActionComplete, OnPlayerActionComplete);
             eventManager.Subscribe(EventType.GrantedUseAction, OnGrantSkip);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
     }
 
@@ -36,10 +37,16 @@ public class PlayerActionManager : MonoBehaviour
         if (!gameController.IsPlayerTurn())
         {
             ResetActions();
-        }else
+        }
+        else
         {
             actionsText.text = currentActionsRemaining.ToString();
         }
+    }
+    private void OnRestart(object target)
+    {
+        currentActionsRemaining = maxActionsPerTurn;
+        actionsText.text = currentActionsRemaining.ToString();
     }
 
     private void OnRequestUseAction(object target)

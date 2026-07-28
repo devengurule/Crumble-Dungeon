@@ -30,7 +30,25 @@ public class EnemyActionManager : MonoBehaviour
             eventManager.Subscribe(EventType.TurnChange, OnTurnChange);
             eventManager.Subscribe(EventType.EnemyActionComplete, OnEnemyActionComplete);
             eventManager.Subscribe(EventType.EnemyDied, OnEnemyDied);
+            eventManager.Subscribe(EventType.RestartGame, OnRestart);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (eventManager != null)
+        {
+            eventManager.Unsubscribe(EventType.TurnChange, OnTurnChange);
+            eventManager.Unsubscribe(EventType.EnemyActionComplete, OnEnemyActionComplete);
+            eventManager.Unsubscribe(EventType.EnemyDied, OnEnemyDied);
+            eventManager.Unsubscribe(EventType.RestartGame, OnRestart);
+        }
+    }
+
+    private void OnRestart(object target)
+    {
+        currentEnemyInProgress = null;
+        StopAllCoroutines();
     }
 
     private void OnTurnChange(object target)
